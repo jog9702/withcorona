@@ -12,11 +12,12 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import vo.*;
 
 /**
  * Servlet implementation class potController
  */
-@WebServlet("/pot/*")
+@WebServlet("/withcorona/*")
 public class CovidController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
@@ -43,6 +44,7 @@ public class CovidController extends HttpServlet {
 		HttpSession session = request.getSession();
 		
 		CovidService covidService = new CovidService();
+//		BoardVO	boardVO = new BoardVO();
 		
 		try {
 			if (action.equals("/covidHomepage")) {
@@ -104,7 +106,7 @@ public class CovidController extends HttpServlet {
 			}else if(action.equals("/foreignSelection")){
 				
 				String loc = request.getParameter("loc");
-				int foreignLocCount = covidService.koreaLocConfirmedCase(loc);
+				int foreignLocCount = covidService.ForeignLocConfirmedCase(loc);
 				request.setAttribute("foreignLocCount", foreignLocCount);
 				request.setAttribute("loc", loc);
 				
@@ -141,12 +143,69 @@ public class CovidController extends HttpServlet {
 					nextPage="/login.jsp";
 				}else {
 					session.setAttribute("auth", auth);
-					nextPage="/board.jsp";
+					nextPage="/qna.jsp";
 				}
 				
 				
 			}else if(action.equals("/update")){
 				covidService.updateConfirmedCase();
+				
+				
+				// 게시판 조회
+			}else if(action.equals("/qna")) {
+				List<BoardVO> qnaList = new ArrayList<BoardVO>();
+				
+				int pageNum = 1;
+				int countPerPage = 5;
+				String strPageNum = request.getParameter("pageNum");
+				String strCountPerPage = request.getParameter("countPerPage");
+				
+				if(strPageNum != null) {
+					pageNum = Integer.parseInt(strPageNum);
+				}
+				if(strCountPerPage != null) {
+					countPerPage = Integer.parseInt(strCountPerPage);
+				}
+				
+				qnaList = covidService.qnaList(pageNum, countPerPage);
+				request.setAttribute("qnaList", qnaList);
+				
+				
+				int total = covidService.qnaTotal();
+				request.setAttribute("total", total);
+				request.setAttribute("pageNum", pageNum);
+				request.setAttribute("countPerPage", countPerPage);
+				
+				nextPage = "/qna.jsp";
+				
+				
+				// 게시판 등록창이동
+			}else if(action.equals("/qnaForm.do")){
+				
+				nextPage = "/withcorona/qnaForm.jsp";
+				
+				// 게시판 등록
+//			}else if(action.equals("/qnaUpdate")){
+//				
+//				BoardVO	boardVo = new BoardVO();
+//				String title = request.getParameter("title");
+//				String desc = request.getParameter("desc");
+//				
+//				Integer id = (Integer) session.getAttribute("empno");
+//				if(id == null) id = 7839;
+//						
+//				boardVo = new BoardVO();
+//				boardVo.setBoardParentno(0);
+//				boardVo.setBoardId(id);
+//				boardVo.setBoardTitle(title);
+//				boardVo.setBoardDesc(desc);
+//				
+//				covidService.qnaUpdate(boardVo);
+//				
+//				nextPage = "/board/listArticles.do";
+				
+				
+				
 			}else {	
 				nextPage = "/deny.jsp";
 			}

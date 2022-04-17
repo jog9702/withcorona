@@ -12,7 +12,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -30,8 +29,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
 import BoardVo.ClinicVo;
-import CovidVo.CountVO;
-import CovidVo.UserVO;
+import vo.*;
 
 public class CovidDao {
 
@@ -63,7 +61,7 @@ public class CovidDao {
 		String result = getStringFromURL(url);
 		
 		try {
-			List<CountVO> list = new ArrayList();
+			List<KoreaVO> list = new ArrayList();
 			
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -75,24 +73,29 @@ public class CovidDao {
 			NodeList nodeList = doc.getElementsByTagName("item");
 			for(int i=0; i<nodeList.getLength(); i++) {
 				Element el = (Element)nodeList.item(i);
-				CountVO vo = new CountVO();
+				KoreaVO vo = new KoreaVO();
 				
 				
 				NodeList nodes = el.getChildNodes();
 				Node node3 = nodes.item(3);
 				Element childElement3 = (Element) node3;
-				vo.setLocal(childElement3.getTextContent());
+				vo.setKoreaLocal(childElement3.getTextContent());
 				System.out.println(childElement3.getTextContent());
 				
 				Node node1 = nodes.item(1);
 				Element childElement1 = (Element) node1;
-				vo.setDeath(Integer.parseInt(childElement1.getTextContent()));
+				vo.setKoreaDeath(Integer.parseInt(childElement1.getTextContent()));
 				System.out.println(childElement1.getTextContent());
 				
 				Node node7 = nodes.item(7);
 				Element childElement7 = (Element) node7;
-				vo.setLocal_info(Integer.parseInt(childElement7.getTextContent()));
+				vo.setKoreaLocalInfo(Integer.parseInt(childElement7.getTextContent()));
 				System.out.println(childElement7.getTextContent());
+				
+				Node node11 = nodes.item(11);
+				Element childElement11 = (Element) node11;
+				vo.setKoreaTime(childElement11.getTextContent());
+				System.out.println(childElement11.getTextContent());
 				
 //				Date type 삽입
 //				Node node0 = nodes.item(0);
@@ -106,25 +109,29 @@ public class CovidDao {
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
 			for(int i=0; i<list.size(); i++) {
-				String query="insert into korea (korea_id, korea_death, korea_local, korea_local_info) values (korea_seq.nextval, ?,?,?)";
+				String query="insert into korea_info (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_info_seq.nextval, ?,?,?,?)";
 				System.out.println(query);
 				
-				CountVO list_i = list.get(i);
+				KoreaVO koreaList = list.get(i);
 				
 //				java.sql.Date date = (java.sql.Date) list_i.get(0);
-				int deathCount = (int) list_i.getDeath();
+				int deathCount = (int) koreaList.getKoreaDeath();
 				System.out.println(deathCount);
-				String local = (String) list_i.getLocal();
+				String local = (String) koreaList.getKoreaLocal();
 				System.out.println(local);
-				int localInfo = (int) list_i.getLocal_info();
+				int localInfo = (int) koreaList.getKoreaLocalInfo();
 				System.out.println(localInfo);
+//				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
+//				String koreaTime = simpleDateFormat.format(koreaList.getKoreaTime());
+				String koreaTime = (String)(koreaList.getKoreaTime());
+				System.out.println(koreaTime);
 				
 				
 				pstmt = con.prepareStatement(query);
 				pstmt.setInt(1, deathCount);
 				pstmt.setString(2, local);
 				pstmt.setInt(3, localInfo);
-//				pstmt.setDate(4, date);
+				pstmt.setString(4, koreaTime);
 				
 				pstmt.executeQuery();
 			}
@@ -151,12 +158,12 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
-			String query="select korea_info as tot from korea where korea_time between sysdate -? and sysdate";
-			System.out.println(query);
+			String query="select korea_info as tot from korea_info where korea_time between sysdate -? and sysdate";
 			
 			pstmt = con.prepareStatement(query);
 			pstmt.setDouble(1, a);
 			
+			System.out.println(query);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
@@ -187,7 +194,7 @@ public class CovidDao {
 		try {
 			con = dataFactory.getConnection();
 			
-			String query="select korea_local_info from korea where korea_local = ? and korea_time > sysdate - 1";
+			String query="select korea_local_info from korea_info where korea_local = ? and korea_time > sysdate - 1";
 			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);
@@ -224,7 +231,7 @@ public class CovidDao {
 		try {
 			con = dataFactory.getConnection();
 			
-			String query="select foreign_local_info from foreign where foreign_local = ? and foreign_time > sysdate - 1";
+			String query="select foreign_local_info from foreign_info where foreign_local = ? and foreign_time > sysdate - 1";
 			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);
@@ -421,6 +428,98 @@ public class CovidDao {
 		}
 		return result.toString();
 	}
+	
+	// 게시판 모두 조회
+	public List<BoardVO> selectQna(int pageNum, int countPerPage){
+		List<BoardVO> qnaList = new ArrayList();
+		
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "";
+			query += "select * from (";
+			query += " select rownum as rnum, board_id, board_parentno, board_title, board_desc, board_time, u.user_id";
+			query += " from board_info b, user_info u";
+			query += " where b.user_id = u.user_id";
+			query += " start with board_parentno = 0";
+			query += " connect by prior board_id = board_parentno";
+			query += " order siblings by board_id desc";
+			query += " ) tmp";
+			query += " where rnum > ? and rnum <= ?";
+			
+			int offset = (pageNum - 1) * countPerPage;
+			int to = offset + countPerPage;
+			
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, to);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardVO boardVo = new BoardVO();
+				boardVo.setBoardId(rs.getInt("board_id"));
+				boardVo.setBoardParentno(rs.getInt("board_parentno"));
+				boardVo.setBoardTitle(rs.getString("board_title"));
+				boardVo.setBoardDesc(rs.getString("board_desc"));
+				boardVo.setBoardTime(rs.getString("board_time"));
+				boardVo.setUserId(rs.getString("user_id"));
+				
+				qnaList.add(boardVo);
+			}
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return qnaList;
+	}
+	
+	// 게시판 입력, 등록
+	public void qnaUpdate(BoardVO boardVo) {
+		
+		try {
+			con = dataFactory.getConnection();
+			String query = "";
+			query += "insert into board_info (board_id, board_title, board_desc, board_parentno)";
+			query += " values(board_info_seq.nextval, ?, ?, ?)";
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setInt(1, boardVo.getBoardId());
+			pstmt.setString(2, boardVo.getBoardTitle());
+			pstmt.setString(3, boardVo.getBoardDesc());
+			pstmt.setInt(4, boardVo.getBoardParentno());
+			
+			int result = pstmt.executeUpdate();
+			System.out.println("새글등록 : result : " + result);
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public int qnaTotal() {
+		
+		int total = 0;
+		
+		try {
+			con = dataFactory.getConnection();
+			String query = "select count(*) as total from board_info";
+			pstmt = con.prepareStatement(query);
+			ResultSet rs = pstmt.executeQuery();
+			while(rs.next()) {
+				total = rs.getInt("total");
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return total;
+	}
+	
+	
 }
 
 

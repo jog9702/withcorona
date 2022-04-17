@@ -1,12 +1,10 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+    pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>확진자 상세</title>
+<title>COVID-19</title>
 <style>
     .fixed{
         position: fixed;
@@ -58,16 +56,12 @@
 	a:active {
 	    text-decoration: none;
 	}
-    .mgt-{
-        margin-top: 30px;
-        font-size: 30px;
-    }
-    .select{
-        width: 800px;
-        text-align: center;
-    }
-
-
+	.mg{
+		margin-top: 100px;
+		font-size: 10px;
+		width:800px;
+		text-align: right;
+	}
 
 </style>
 </head>
@@ -86,38 +80,14 @@
         <hr>
     </div>
     </header>
-    <section>
-		<div class="mgt">
-            <div class="fs1">일일 확진자수 : ${ todayCount } </div>
-            <div class="flex1">
-                <div class="mglr">연간 확진자수 : ${ monthCount }</div>
-                <div class="mglr">월간 확진자수 : ${ yearCount }</div>
-            </div>
-        </div>
-        <div>
-            <div class="mgt- select">
-        	<% 
-        	
-        		if(request.getAttribute("foreignLocCount")== null){
-        			out.println("지역을 입력하세요");
-        		}else{
-        			%> ${ loc } : ${ foreignLocCount } 명 <%        		
-        		}
-        	%> 
-            </div>
-
-            <div class="select">
-        	<form action="/withcorona/foreignSelection">
-				<select name="loc">
-					<option value="미국" selected>미국</option>
-					<option value="중국">중국</option>
-					<option value="일본">일본</option>
-				</select>
-				<input type="submit" value="조회" />
-        	</form>
-        </div>
-
-        </div>
-    </section>
+	<h1>새글 쓰기</h1>
+	<form name="articleForm" method="post" action="${ contextPath }/withcorona/qnaUpdate">
+		제목 : <input type="text" name="title"><br>
+		내용 : <br>
+		<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
+		<br><br>
+		<input type="submit" value="글쓰기">
+		<input type="button" value="목록보기" onclick="/withcorona/qna.jsp">
+	</form>
 </body>
 </html>

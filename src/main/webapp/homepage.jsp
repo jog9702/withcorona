@@ -70,13 +70,13 @@
     <header>
     <div class="fixed">
         <div class="fs">
-            <a href="/pot_220425/pot/covidHomepage">COVID-19</a>
+            <a href="/withcorona/covidHomepage">COVID-19</a>
         </div>
         <div class="flex">
-            <div><a href="/pot_220425/pot/covidKorea">국내 상세</a></div>
-            <div><a href="/pot_220425/pot/covidForeign">해외 상세</a></div>
-            <div><a href="/pot_220425/pot/search">가까운 검사소 찾기</a></div>
-            <div><a href="/pot_220425/pot/login">문의/제보</a></div>
+            <div><a href="/withcorona/covidKorea">국내 상세</a></div>
+            <div><a href="/withcorona/covidForeign">해외 상세</a></div>
+            <div><a href="/withcorona/search">가까운 검사소 찾기</a></div>
+            <div><a href="/withcorona/qna">문의/제보</a></div>
         </div>
         <hr>
     </div>
@@ -91,7 +91,7 @@
         </div>
         
         <div>
-        	<div><a href="/pot_220425/pot/update">update</a></div>
+        	<div><a href="/withcorona/update">update</a></div>
         </div>
         
     </section>
