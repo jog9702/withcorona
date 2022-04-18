@@ -28,7 +28,6 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
-import BoardVo.ClinicVo;
 import vo.*;
 
 public class CovidDao {
@@ -259,99 +258,6 @@ public class CovidDao {
 		}
 		
 		return count;
-	}
-	
-	// 보건소 정보 표시 (openApi로 변경?)
-	public List<ClinicVo> clinic() {
-		
-		List<ClinicVo> list = new ArrayList<ClinicVo>();
-		
-		try {
-			con = dataFactory.getConnection();
-			
-			String query = "";
-			query += "SELECT * ";
-			query += " FROM clinic";
-			
-			pstmt = con.prepareStatement(query);
-			ResultSet rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				ClinicVo vo = new ClinicVo();
-				
-				vo.setClinic_id(rs.getInt("clinic_id"));
-				vo.setClinic_local(rs.getString("clinic_local"));
-				vo.setClinic_name(rs.getString("clinic_name"));
-				vo.setClinic_info(rs.getString("clinic_info"));
-				vo.setClinic_tel(rs.getString("clinic_tel"));
-				
-				list.add(vo);
-			}
-			if(rs != null) {
-				rs.close();
-			}
-			if(pstmt != null) {
-				pstmt.close();
-			}
-			if(con != null) {
-				con.close();
-			}
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-		
-	}
-	
-	// 보건소 검색 (openApi로 변경?)
-	public List<ClinicVo> searchClinic(String str) {
-		
-		List<ClinicVo> list = new ArrayList<ClinicVo>();
-		
-		try {
-			con = dataFactory.getConnection();
-			
-			String query = "";
-			query += "SELECT * ";
-			query += " FROM clinic where clinic_local like ? or clinic_name like ? or clinic_info like ?";
-			
-			pstmt = con.prepareStatement(query);
-			
-			pstmt.setString(1, "%"+str+"%");
-			pstmt.setString(2, "%"+str+"%");
-			pstmt.setString(3, "%"+str+"%");
-			
-			ResultSet rs = pstmt.executeQuery();
-			
-			while(rs.next()) {
-				ClinicVo vo = new ClinicVo();
-				
-				vo.setClinic_id(rs.getInt("clinic_id"));
-				vo.setClinic_local(rs.getString("clinic_local"));
-				vo.setClinic_name(rs.getString("clinic_name"));
-				vo.setClinic_info(rs.getString("clinic_info"));
-				vo.setClinic_tel(rs.getString("clinic_tel"));
-				
-				list.add(vo);
-			}
-			if(rs != null) {
-				rs.close();
-			}
-			if(pstmt != null) {
-				pstmt.close();
-			}
-			if(con != null) {
-				con.close();
-			}
-			
-		}catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		return list;
-		
 	}
 	
 	public String loginCheck(String id, String pw) {

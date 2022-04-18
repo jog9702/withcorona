@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import BoardVo.ClinicVo;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -111,26 +110,7 @@ public class CovidController extends HttpServlet {
 				request.setAttribute("loc", loc);
 				
 				nextPage = "/covidForeign.jsp";
-				
-			}else if (action.equals("/search")) {
-				
-				
-				List<ClinicVo> clinicInfo = covidService.getClinicInfo();
-				
-				request.setAttribute("clinicInfo", clinicInfo);
-				
-				nextPage = "/clinic.jsp";
-				
-				
-			}else if(action.equals("/selectClinic")){
-				
-				String str = (String) request.getParameter("loc");
-				List<ClinicVo> searchClinicInfo = covidService.getSearchClinicInfo(str);
-				request.setAttribute("searchClinicInfo", searchClinicInfo);
-				
-				
-				nextPage = "/clinic.jsp";
-				
+
 			}else if(action.equals("/login")) {
 				
 				nextPage="/login.jsp";
