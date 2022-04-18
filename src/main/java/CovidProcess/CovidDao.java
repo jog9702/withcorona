@@ -65,7 +65,7 @@ public class CovidDao {
 		
 		try {
 			con = dataFactory.getConnection();
-			String tmpQuery = "select korea_local from korea where korea_time between sysdate-1 and sysdate and korea_local = '합계'"; 
+			String tmpQuery = "select korea_local from korea_info where korea_time between sysdate-1 and sysdate and korea_local = '합계'"; 
 			pstmt = con.prepareStatement(tmpQuery);
 			pstmt.executeQuery();
 			
@@ -142,7 +142,7 @@ public class CovidDao {
 				
 				// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
 				for(int i=0; i<list.size(); i++) {
-					String query="insert into korea (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_seq.nextval, ?,?,?,?)";
+					String query="insert into korea_info (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_info_seq.nextval, ?,?,?,?)";
 					System.out.println(query);
 					
 					CoronaVO list_i = list.get(i);
@@ -189,7 +189,7 @@ public class CovidDao {
 	public void dropTable() {
 		try {
 			con = dataFactory.getConnection();
-			String query="drop table korea";
+			String query="drop table korea_info";
 			pstmt = con.prepareStatement(query);
 			pstmt.executeQuery();
 			
@@ -210,7 +210,7 @@ public class CovidDao {
 	public void createTable() {
 		try {
 			con = dataFactory.getConnection();
-			String query="create table korea(korea_id number(10) primary key, korea_info number(10), korea_death number(10), korea_local varchar2(1000), korea_local_info number(10), korea_time date)";
+			String query="create table korea_info(korea_id number(10) primary key, korea_death number(10), korea_local varchar2(1000), korea_local_info number(10), korea_time date)";
 			pstmt = con.prepareStatement(query);
 			pstmt.executeQuery();
 			
@@ -284,7 +284,7 @@ public class CovidDao {
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
 			for(int i=0; i<list.size(); i++) {
-				String query="insert into korea (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_seq.nextval, ?,?,?,?)";
+				String query="insert into korea_info (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_info_seq.nextval, ?,?,?,?)";
 				System.out.println(query);
 				
 				CoronaVO list_i = list.get(i);
@@ -331,7 +331,7 @@ public class CovidDao {
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
 			if(a == 1) {
-				String query="SELECT sum(distinct korea_local_info) as korea_local_info FROM   korea WHERE  korea_id = (SELECT Max(korea_id) FROM   korea WHERE  korea_time BETWEEN sysdate - ? AND sysdate AND korea_local = '합계')";
+				String query="SELECT sum(distinct korea_local_info) as korea_local_info FROM   korea_info WHERE  korea_id = (SELECT Max(korea_id) FROM   korea_info WHERE  korea_time BETWEEN sysdate - ? AND sysdate AND korea_local = '합계')";
 				System.out.println(query);
 				
 				pstmt = con.prepareStatement(query);
@@ -352,7 +352,7 @@ public class CovidDao {
 					con.close();
 				}
 			}else {
-				String query="select sum(distinct korea_local_info) as korea_local_info from korea where korea_local = '합계' and korea_time BETWEEN sysdate - ? AND sysdate";
+				String query="select sum(distinct korea_local_info) as korea_local_info from korea_info where korea_local = '합계' and korea_time BETWEEN sysdate - ? AND sysdate";
 				System.out.println(query);
 				
 				pstmt = con.prepareStatement(query);
@@ -391,7 +391,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
-			String query="select (select korea_death from korea where korea_time between sysdate-1 and sysdate and korea_local = '합계')-(select korea_death from korea where korea_time between sysdate - 2 and sysdate - 1 and korea_local = '합계') as korea_death from dual";
+			String query="select (select korea_death from korea_info where korea_time between sysdate-1 and sysdate and korea_local = '합계')-(select korea_death from korea_info where korea_time between sysdate - 2 and sysdate - 1 and korea_local = '합계') as korea_death from dual";
 			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);
@@ -427,7 +427,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
-			String query="select (select korea_death from korea where korea_time between sysdate-1 and sysdate and korea_local = ?)-(select korea_death from korea where korea_time between sysdate - 2 and sysdate - 1 and korea_local = ?) as korea_death from dual";
+			String query="select (select korea_death from korea_info where korea_time between sysdate-1 and sysdate and korea_local = ?)-(select korea_death from korea_info where korea_time between sysdate - 2 and sysdate - 1 and korea_local = ?) as korea_death from dual";
 			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);
@@ -466,7 +466,7 @@ public class CovidDao {
 		try {
 			con = dataFactory.getConnection();
 			
-			String query="SELECT korea_local_info FROM   korea WHERE  korea_id = (SELECT Max(korea_id) FROM   korea WHERE  korea_time BETWEEN sysdate - 1 AND sysdate AND korea_local = ?)";
+			String query="SELECT korea_local_info FROM   korea_info WHERE  korea_id = (SELECT Max(korea_id) FROM   korea_info WHERE  korea_time BETWEEN sysdate - 1 AND sysdate AND korea_local = ?)";
 			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);
