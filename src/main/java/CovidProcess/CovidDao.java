@@ -28,6 +28,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 
+import vo.CoronaVO;
 import vo.*;
 
 public class CovidDao {
@@ -51,16 +52,190 @@ public class CovidDao {
 		}
 	}
 	
-	// xml로 데이터 받아서 update버튼 누르면 그날 확진자 수 따오기
+	// xml로 데이터 받아서 update버튼 누르면 그날 국내 확진자 수 따오기
 	// openApi xml 데이터 데이터 베이스에 넣는 작업
+	// 박정희
 	public void updateConfirmedCase () {
 		
 		String url ="http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
 		url += "startCreateDt="+dateToStr+"&endCreateDt=" +dateToStr;
 		String result = getStringFromURL(url);
+		String token = null;
+		
 		
 		try {
-			List<KoreaVO> list = new ArrayList();
+			con = dataFactory.getConnection();
+			String tmpQuery = "select korea_local from korea where korea_time between sysdate-1 and sysdate and korea_local = '합계'"; 
+			pstmt = con.prepareStatement(tmpQuery);
+			pstmt.executeQuery();
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				token = rs.getString("korea_local"); 
+			}
+			
+			if(pstmt != null) {
+				pstmt.close();
+			}
+			if(con != null) {
+				con.close();
+			}
+			if(rs != null) {
+				rs.close();
+			}
+		} catch (SQLException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+	
+		
+		if(token == null) {
+			try {
+				List<CoronaVO> list = new ArrayList();
+				
+				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+				DocumentBuilder builder = factory.newDocumentBuilder();
+				StringReader sr = new StringReader(result);
+				InputSource is = new InputSource(sr);
+				
+				Document doc = builder.parse(is);
+				
+				NodeList nodeList = doc.getElementsByTagName("item");
+				for(int i=0; i<nodeList.getLength(); i++) {
+					Element el = (Element)nodeList.item(i);
+					CoronaVO vo = new CoronaVO();
+					
+					
+					NodeList nodes = el.getChildNodes();
+					Node node3 = nodes.item(3);
+					Element childElement3 = (Element) node3;
+					vo.setKoreaLocal(childElement3.getTextContent());
+					System.out.println(childElement3.getTextContent());
+					
+					Node node1 = nodes.item(1);
+					Element childElement1 = (Element) node1;
+					vo.setKoreaDeath(Integer.parseInt(childElement1.getTextContent()));
+					System.out.println(childElement1.getTextContent());
+					
+					Node node7 = nodes.item(7);
+					Element childElement7 = (Element) node7;
+					vo.setKoreaLocalInfo(Integer.parseInt(childElement7.getTextContent()));
+					System.out.println(childElement7.getTextContent());
+					
+					Node node0 = nodes.item(0);
+					Element childElement0 = (Element) node0;
+					String timeBefore = childElement0.getTextContent();
+					String time = timeBefore.substring(1, 10).replace("-", "/");
+					vo.setKoreaTime(time);
+					System.out.println(time);
+					
+//				Date type 삽입
+//				Node node0 = nodes.item(0);
+//				Element childElement0 = (Element) node0;
+//				vo.setDate(childElement0.getTextContent());
+					list.add(vo);	  
+				}
+				
+				
+				con = dataFactory.getConnection();
+				
+				// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
+				for(int i=0; i<list.size(); i++) {
+					String query="insert into korea (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_seq.nextval, ?,?,?,?)";
+					System.out.println(query);
+					
+					CoronaVO list_i = list.get(i);
+					
+//				java.sql.Date date = (java.sql.Date) list_i.get(0);
+					int deathCount = (int) list_i.getKoreaDeath();
+					System.out.println(deathCount);
+					String local = (String) list_i.getKoreaLocal();
+					System.out.println(local);
+					int localInfo = (int) list_i.getKoreaLocalInfo();
+					System.out.println(localInfo);
+					String time = list_i.getKoreaTime();
+					System.out.println(time);
+					
+					
+					pstmt = con.prepareStatement(query);
+					pstmt.setInt(1, deathCount);
+					pstmt.setString(2, local);
+					pstmt.setInt(3, localInfo);
+					pstmt.setString(4, time);
+					
+					pstmt.executeQuery();
+				}
+				
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(con != null) {
+					con.close();
+				}
+				if(sr != null) {
+					sr.close();
+				}			
+			}catch(Exception e) {
+				e.printStackTrace();
+			}
+		}else {
+			System.out.println("이미 최신 데이터 입니다");
+		}
+	}
+	
+	// 날짜를 입력받아 DB를 초기화 할때 사용되는 드롭문
+	// 박정희
+	public void dropTable() {
+		try {
+			con = dataFactory.getConnection();
+			String query="drop table korea";
+			pstmt = con.prepareStatement(query);
+			pstmt.executeQuery();
+			
+			if(pstmt != null) {
+				pstmt.close();
+			}
+			if(con != null) {
+				con.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	// 날짜를 입력받아 DB를 초기화 할때 사용되는 크리에이트문
+	// 박정희
+	public void createTable() {
+		try {
+			con = dataFactory.getConnection();
+			String query="create table korea(korea_id number(10) primary key, korea_info number(10), korea_death number(10), korea_local varchar2(1000), korea_local_info number(10), korea_time date)";
+			pstmt = con.prepareStatement(query);
+			pstmt.executeQuery();
+			
+			if(pstmt != null) {
+				pstmt.close();
+			}
+			if(con != null) {
+				con.close();
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	// 입력받은 날짜 부터 오늘 까지의 xml정보로 DB초기화
+	// 박정희
+	public void updateDBtoDate (String sDay) {
+		
+		String url ="http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
+		url += "startCreateDt="+sDay+"&endCreateDt=" +dateToStr;
+		String result = getStringFromURL(url);
+		
+		try {
+			List<CoronaVO> list = new ArrayList();
 			
 			DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 			DocumentBuilder builder = factory.newDocumentBuilder();
@@ -72,7 +247,7 @@ public class CovidDao {
 			NodeList nodeList = doc.getElementsByTagName("item");
 			for(int i=0; i<nodeList.getLength(); i++) {
 				Element el = (Element)nodeList.item(i);
-				KoreaVO vo = new KoreaVO();
+				CoronaVO vo = new CoronaVO();
 				
 				
 				NodeList nodes = el.getChildNodes();
@@ -91,10 +266,12 @@ public class CovidDao {
 				vo.setKoreaLocalInfo(Integer.parseInt(childElement7.getTextContent()));
 				System.out.println(childElement7.getTextContent());
 				
-				Node node11 = nodes.item(11);
-				Element childElement11 = (Element) node11;
-				vo.setKoreaTime(childElement11.getTextContent());
-				System.out.println(childElement11.getTextContent());
+				Node node0 = nodes.item(0);
+				Element childElement0 = (Element) node0;
+				String timeBefore = childElement0.getTextContent();
+				String time = timeBefore.substring(1, 10).replace("-", "/");
+				vo.setKoreaTime(time);
+				System.out.println(time);
 				
 //				Date type 삽입
 //				Node node0 = nodes.item(0);
@@ -102,35 +279,31 @@ public class CovidDao {
 //				vo.setDate(childElement0.getTextContent());
 				list.add(vo);	  
 			}
-			
-			
+		
 			con = dataFactory.getConnection();
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
 			for(int i=0; i<list.size(); i++) {
-				String query="insert into korea_info (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_info_seq.nextval, ?,?,?,?)";
+				String query="insert into korea (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_seq.nextval, ?,?,?,?)";
 				System.out.println(query);
 				
-				KoreaVO koreaList = list.get(i);
+				CoronaVO list_i = list.get(i);
 				
 //				java.sql.Date date = (java.sql.Date) list_i.get(0);
-				int deathCount = (int) koreaList.getKoreaDeath();
+				int deathCount = (int) list_i.getKoreaDeath();
 				System.out.println(deathCount);
-				String local = (String) koreaList.getKoreaLocal();
+				String local = (String) list_i.getKoreaLocal();
 				System.out.println(local);
-				int localInfo = (int) koreaList.getKoreaLocalInfo();
+				int localInfo = (int) list_i.getKoreaLocalInfo();
 				System.out.println(localInfo);
-//				SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy년 MM월 dd일");
-//				String koreaTime = simpleDateFormat.format(koreaList.getKoreaTime());
-				String koreaTime = (String)(koreaList.getKoreaTime());
-				System.out.println(koreaTime);
+				String time = list_i.getKoreaTime();
 				
 				
 				pstmt = con.prepareStatement(query);
 				pstmt.setInt(1, deathCount);
 				pstmt.setString(2, local);
 				pstmt.setInt(3, localInfo);
-				pstmt.setString(4, koreaTime);
+				pstmt.setString(4, time);
 				
 				pstmt.executeQuery();
 			}
@@ -151,22 +324,82 @@ public class CovidDao {
 	
 	// 홈페이지에 표시되는 일일, 월별, 연별 확진자 수
 	// 박정희
-	public int todayConfirmedCase (double a) {
+	public int todayConfirmedCase (int a) {
 		int count = 0;
 		try {
 			con = dataFactory.getConnection();
 			
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
-			String query="select korea_info as tot from korea_info where korea_time between sysdate -? and sysdate";
+			if(a == 1) {
+				String query="SELECT sum(distinct korea_local_info) as korea_local_info FROM   korea WHERE  korea_id = (SELECT Max(korea_id) FROM   korea WHERE  korea_time BETWEEN sysdate - ? AND sysdate AND korea_local = '합계')";
+				System.out.println(query);
+				
+				pstmt = con.prepareStatement(query);
+				pstmt.setInt(1, a);
+				
+				ResultSet rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					count = rs.getInt("korea_local_info"); 
+				}
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(con != null) {
+					con.close();
+				}
+			}else {
+				String query="select sum(distinct korea_local_info) as korea_local_info from korea where korea_local = '합계' and korea_time BETWEEN sysdate - ? AND sysdate";
+				System.out.println(query);
+				
+				pstmt = con.prepareStatement(query);
+				pstmt.setInt(1, a);
+				
+				ResultSet rs = pstmt.executeQuery();
+				
+				while(rs.next()) {
+					count = rs.getInt("korea_local_info"); 
+				}
+				if(rs != null) {
+					rs.close();
+				}
+				if(pstmt != null) {
+					pstmt.close();
+				}
+				if(con != null) {
+					con.close();
+				}
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		return count;
+	}
+	
+	// 일일 사망자
+	// 박정희
+	public int todayDeath () {
+		int count = 0;
+		try {
+			con = dataFactory.getConnection();
+			
+			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
+			String query="select (select korea_death from korea where korea_time between sysdate-1 and sysdate and korea_local = '합계')-(select korea_death from korea where korea_time between sysdate - 2 and sysdate - 1 and korea_local = '합계') as korea_death from dual";
+			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);
-			pstmt.setDouble(1, a);
 			
-			System.out.println(query);
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				 count += rs.getInt("tot"); 
+				count = rs.getInt("korea_death"); 
 			}
 			if(rs != null) {
 				rs.close();
@@ -186,14 +419,54 @@ public class CovidDao {
 		return count;
 	}
 	
+	// 지역별 일일 사망자
+	// 박정희
+	public int todayDeath (String loc) {
+		int count = 0;
+		try {
+			con = dataFactory.getConnection();
+			
+			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
+			String query="select (select korea_death from korea where korea_time between sysdate-1 and sysdate and korea_local = ?)-(select korea_death from korea where korea_time between sysdate - 2 and sysdate - 1 and korea_local = ?) as korea_death from dual";
+			System.out.println(query);
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, loc);
+			pstmt.setString(2, loc);
+			
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				count = rs.getInt("korea_death"); 
+			}
+			if(rs != null) {
+				rs.close();
+			}
+			if(pstmt != null) {
+				pstmt.close();
+			}
+			if(con != null) {
+				con.close();
+			}
+			
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return count;
+	}
+	
 	// 국내 지역을 받아서 DB 접속 -> 그 지역의 확진자 수를 표시한다
+	// 박정희
 	public int koreaLocConfirmedCase (String loc) {
 		int count =0;
 
 		try {
 			con = dataFactory.getConnection();
 			
-			String query="select korea_local_info from korea_info where korea_local = ? and korea_time > sysdate - 1";
+			String query="SELECT korea_local_info FROM   korea WHERE  korea_id = (SELECT Max(korea_id) FROM   korea WHERE  korea_time BETWEEN sysdate - 1 AND sysdate AND korea_local = ?)";
 			System.out.println(query);
 			
 			pstmt = con.prepareStatement(query);

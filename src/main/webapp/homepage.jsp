@@ -1,6 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
 %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,7 +18,7 @@
         margin-top: 240px;
      }
     .mglr{
-        margin: 0px 80px;
+        margin: 0px 30px;
     }
     .flex{
         display: flex;
@@ -76,7 +79,7 @@
             <div><a href="/withcorona/covidKorea">국내 상세</a></div>
             <div><a href="/withcorona/covidForeign">해외 상세</a></div>
             <div><a href="/withcorona/search">가까운 검사소 찾기</a></div>
-            <div><a href="/withcorona/qna">문의/제보</a></div>
+            <div><a href="/withcorona/login">문의/제보</a></div>
         </div>
         <hr>
     </div>
@@ -87,12 +90,10 @@
             <div class="flex1">
                 <div class="mglr">연간 확진자수 : ${ monthCount }</div>
                 <div class="mglr">월간 확진자수 : ${ yearCount }</div>
+                <div class="mglr">사망자수 : ${ todayDeath }</div>
             </div>
         </div>
-        
-        <div>
-        	<div><a href="/withcorona/update">update</a></div>
-        </div>
+
         
     </section>
 </body>

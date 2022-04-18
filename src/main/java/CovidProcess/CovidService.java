@@ -14,7 +14,7 @@ public class CovidService {
 	}
 	
 	public int todayConfirmedCase() {
-		return covidDao.todayConfirmedCase(0.9);
+		return covidDao.todayConfirmedCase(1);
 	}
 	
 	public int monthConfirmedCase() {
@@ -23,6 +23,14 @@ public class CovidService {
 	
 	public int yearConfirmedCase() {
 		return covidDao.todayConfirmedCase(365);
+	}
+	
+	public int todayDeath() {
+		return covidDao.todayDeath();
+	}
+	
+	public int todayDeath(String loc) {
+		return covidDao.todayDeath(loc);
 	}
 	
 	public int koreaLocConfirmedCase(String loc) {
@@ -48,6 +56,12 @@ public class CovidService {
 	
 	public int qnaTotal() {
 		return covidDao.qnaTotal();
+	}
+	
+	public void updateDBtoDate(String before) {
+		covidDao.dropTable();
+		covidDao.createTable();
+		covidDao.updateDBtoDate(before);
 	}
 	
 	

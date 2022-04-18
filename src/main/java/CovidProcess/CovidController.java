@@ -1,6 +1,7 @@
 package CovidProcess;
 
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,15 +49,21 @@ public class CovidController extends HttpServlet {
 		try {
 			if (action.equals("/covidHomepage")) {
 				
-				int todayConfirmedCase = covidService.todayConfirmedCase();
-				int monthConfirmedCase = covidService.monthConfirmedCase();
-				int yearConfirmedCase = covidService.yearConfirmedCase();
+				DecimalFormat fmt = new DecimalFormat("###,###");
+				
+				String todayConfirmedCase = fmt.format(covidService.todayConfirmedCase());
+				String monthConfirmedCase = fmt.format(covidService.monthConfirmedCase());
+				String yearConfirmedCase = fmt.format(covidService.yearConfirmedCase());
+				String todayDeath = fmt.format(covidService.todayDeath());
+				
 				session.setAttribute("todayCount", todayConfirmedCase);
 				session.setAttribute("monthCount", monthConfirmedCase);
 				session.setAttribute("yearCount", yearConfirmedCase);
+				session.setAttribute("todayDeath", todayDeath);
 				
 				nextPage = "/homepage.jsp";
 				
+				nextPage = "/homepage.jsp";
 			} else if(action.equals("/covidKorea")){
 				
 				nextPage = "/covidKorea.jsp";
@@ -66,36 +73,11 @@ public class CovidController extends HttpServlet {
 				String loc = request.getParameter("loc");
 				int koreaLocCount = covidService.koreaLocConfirmedCase(loc);
 				request.setAttribute("koreaLocCount", koreaLocCount);
+				request.setAttribute("loc", loc);
 				
-				switch(loc) {
-				case "seoul":
-					request.setAttribute("loc", "서울");
-					break;
-				case "gyeonggi":
-					request.setAttribute("loc", "경기도");
-					break;
-				case "gangwon":
-					request.setAttribute("loc", "강원도");
-					break;
-				case "chungcheongN":
-					request.setAttribute("loc", "충청북도");
-					break;
-				case "chungcheongS":
-					request.setAttribute("loc", "충청남도");
-					break;
-				case "jeollaN":
-					request.setAttribute("loc", "전라북도");
-					break;
-				case "jeollaS":
-					request.setAttribute("loc", "전라남도");
-					break;
-				case "gyeongsangN":
-					request.setAttribute("loc", "경상북도");
-					break;
-				case "gyeongsangS":
-					request.setAttribute("loc", "경상남도");
-					break;
-			}
+				int locDeath = covidService.todayDeath(loc);
+				request.setAttribute("locDeath", locDeath);
+				
 				nextPage = "/covidKorea.jsp";
 				
 			}else if(action.equals("/covidForeign")){
@@ -125,12 +107,7 @@ public class CovidController extends HttpServlet {
 					session.setAttribute("auth", auth);
 					nextPage="/qna.jsp";
 				}
-				
-				
-			}else if(action.equals("/update")){
-				covidService.updateConfirmedCase();
-				
-				
+			
 				// 게시판 조회
 			}else if(action.equals("/qna")) {
 				List<BoardVO> qnaList = new ArrayList<BoardVO>();
@@ -185,6 +162,14 @@ public class CovidController extends HttpServlet {
 //				nextPage = "/board/listArticles.do";
 				
 				
+				
+			}else if(action.equals("/update")){
+				covidService.updateConfirmedCase();
+				nextPage="/covidKorea.jsp";
+			}else if(action.equals("/updateToDate")){
+				
+				covidService.updateDBtoDate(request.getParameter("before"));
+				nextPage="/covidKorea.jsp";
 				
 			}else {	
 				nextPage = "/deny.jsp";

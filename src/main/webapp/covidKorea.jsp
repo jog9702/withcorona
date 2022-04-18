@@ -16,7 +16,7 @@
         margin-top: 240px;
      }
     .mglr{
-        margin: 0px 80px;
+        margin: 0px 30px;
     }
     .flex{
         display: flex;
@@ -66,6 +66,9 @@
         width: 800px;
         text-align: center;
     }
+    .fs--{
+    	font-size: 15px;
+    }
 
 
 
@@ -87,43 +90,61 @@
     </div>
     </header>
     <section>
-		<div class="mgt">
-            <div class="fs1">일일 확진자수 : ${ todayCount } </div>
+        <div class="mgt">
+            <div class="fs1">일일 확진자수 : ${ todayCount }</div>
             <div class="flex1">
                 <div class="mglr">연간 확진자수 : ${ monthCount }</div>
                 <div class="mglr">월간 확진자수 : ${ yearCount }</div>
+                <div class="mglr">사망자수 : ${ todayDeath }</div>
             </div>
         </div>
+        
         <div>
             <div class="mgt- select">
-        	<% 
-        	
-        		if(request.getAttribute("koreaLocCount")== null){
-        			out.println("지역을 입력하세요");
-        		}else{
-        			%> ${ loc } : ${ koreaLocCount } 명 <%        		
-        		}
-        	%> 
+	        	<c:choose>
+	 	       		<c:when test="${ koreaLocCount == null }">
+	 	       			<div>지역을 입력하세요</div>
+	 	       		</c:when>
+	 	       		<c:otherwise>
+	 	       			<div>${ loc } 확진자수 : ${ koreaLocCount } 명</div>
+	 	       			<div class="fs--">사망자수 : ${ locDeath } 명</div>
+	 	       		</c:otherwise>
+	        	</c:choose>
             </div>
 
             <div class="select">
         	<form action="/withcorona/koreaSelection">
 				<select name="loc">
-					<option value="seoul" selected>서울</option>
-					<option value="gyeonggi">경기</option>
-					<option value="gangwon">강원</option>
-					<option value="chungcheongN">충북</option>
-					<option value="chungcheongS">충남</option>
-					<option value="jeollaN">전북</option>
-					<option value="jeollaS">전남</option>
-					<option value="gyeongsangN">경북</option>
-					<option value="gyeongsangS">경남</option>
+					<option value="서울">서울</option>
+					<option value="경기">경기</option>
+					<option value="강원">강원</option>
+					<option value="충북">충북</option>
+					<option value="충남">충남</option>
+					<option value="전북">전북</option>
+					<option value="전남">전남</option>
+					<option value="경북">경북</option>
+					<option value="경남">경남</option>
+					<option value="제주">제주</option>
 				</select>
 				<input type="submit" value="조회" />
         	</form>
         </div>
 
         </div>
+        
+                
+        <c:choose>
+        	<c:when test="${ 1 == 1 }"> 
+		        <div>
+		        	<div><a href="/withcorona/update">update</a></div>
+		        </div>
+        	</c:when>
+        </c:choose>
+        
+        <form action="/withcorona/updateToDate">
+        	<input type="text" name="before" value="yyyymmdd">
+        	<input type="submit" value="업데이트">
+        </form>
     </section>
 </body>
 </html>
