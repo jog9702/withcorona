@@ -3,7 +3,6 @@ package CovidProcess;
 import java.util.ArrayList;
 import java.util.List;
 
-import BoardVo.ClinicVo;
 import vo.*;
 
 public class CovidService {
@@ -34,13 +33,6 @@ public class CovidService {
 		return covidDao.ForeignLocConfirmedCase(loc);
 	}
 	
-	public List<ClinicVo> getClinicInfo() {
-		return covidDao.clinic();
-	}
-	
-	public List<ClinicVo> getSearchClinicInfo(String str) {
-		return covidDao.searchClinic(str);
-	}
 	
 	public String loginCheck(String id, String pw) {
 		return covidDao.loginCheck(id, pw);

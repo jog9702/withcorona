@@ -66,6 +66,9 @@
 		width:800px;
 		text-align: right;
 	}
+	table{
+		margin-top: 240px;
+	}
 
 </style>
 </head>
@@ -131,5 +134,8 @@
 		</tbody>
     	</table>
     </section>
+    	<a href="${ contextPath }/withcorona/qnaForm">
+		<p>글쓰기</p>
+	</a>
 </body>
 </html>
