@@ -165,9 +165,6 @@ public class CovidController extends HttpServlet {
 				
 				
 				
-			}else if(action.equals("/update")){
-				covidService.updateConfirmedCase();
-				nextPage="/covidKorea.jsp";
 			}else if(action.equals("/updateToDate")){
 				
 				covidService.updateDBtoDate(request.getParameter("before"));
