@@ -51,28 +51,25 @@ public class CovidDao {
 			e.printStackTrace();
 		}
 	}
-	
-	// xml로 데이터 받아서 update버튼 누르면 그날 국내 확진자 수 따오기
-	// openApi xml 데이터 데이터 베이스에 넣는 작업
+
+	// 홈페이지 접속하면 db를 확인 -> 최근날짜부터 오늘날짜까지 업데이트
+	// db에 데이터가 없을시 작동 안하니 db초기화 먼저 진행
+	// update 버튼 필요없이 자동 업데이트
 	// 박정희
-	public void updateConfirmedCase () {
-		
-		String url ="http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
-		url += "startCreateDt="+dateToStr+"&endCreateDt=" +dateToStr;
-		String result = getStringFromURL(url);
+	public void updateToAuto () {
+
 		String token = null;
-		
 		
 		try {
 			con = dataFactory.getConnection();
-			String tmpQuery = "select korea_local from korea_info where korea_time between sysdate-1 and sysdate and korea_local = '합계'"; 
+			String tmpQuery = "SELECT Max(korea_time) as korea_time FROM   korea"; 
 			pstmt = con.prepareStatement(tmpQuery);
 			pstmt.executeQuery();
 			
 			ResultSet rs = pstmt.executeQuery();
 			
 			while(rs.next()) {
-				token = rs.getString("korea_local"); 
+				token = rs.getString("korea_time"); 
 			}
 			
 			if(pstmt != null) {
@@ -88,99 +85,117 @@ public class CovidDao {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-	
 		
 		if(token == null) {
-			try {
-				List<CoronaVO> list = new ArrayList();
+			System.out.println("db를 초기화 해 주세요");
+		}else {
+			
+			System.out.println(token);
+			int tmpDate = (Integer.parseInt(token.substring(8, 10)) + 1);
+			System.out.println(Integer.parseInt(token.substring(8, 10)));
+			System.out.println(tmpDate);
+			String tmpDate2 = Integer.toString(tmpDate);
+			System.out.println(tmpDate2);
+			
+			token = (token.substring(0, 8) + tmpDate2).replace("-", "");
+			System.out.println(token);
+			
+			if(Integer.parseInt(token) < Integer.parseInt(dateToStr)) {
 				
-				DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-				DocumentBuilder builder = factory.newDocumentBuilder();
-				StringReader sr = new StringReader(result);
-				InputSource is = new InputSource(sr);
+				String url ="http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
+				url += "startCreateDt="+token+"&endCreateDt="+dateToStr;
+				String result = getStringFromURL(url);
 				
-				Document doc = builder.parse(is);
-				
-				NodeList nodeList = doc.getElementsByTagName("item");
-				for(int i=0; i<nodeList.getLength(); i++) {
-					Element el = (Element)nodeList.item(i);
-					CoronaVO vo = new CoronaVO();
+				try {
+					List<CoronaVO> list = new ArrayList();
 					
+					DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+					DocumentBuilder builder = factory.newDocumentBuilder();
+					StringReader sr = new StringReader(result);
+					InputSource is = new InputSource(sr);
 					
-					NodeList nodes = el.getChildNodes();
-					Node node3 = nodes.item(3);
-					Element childElement3 = (Element) node3;
-					vo.setKoreaLocal(childElement3.getTextContent());
-					System.out.println(childElement3.getTextContent());
+					Document doc = builder.parse(is);
 					
-					Node node1 = nodes.item(1);
-					Element childElement1 = (Element) node1;
-					vo.setKoreaDeath(Integer.parseInt(childElement1.getTextContent()));
-					System.out.println(childElement1.getTextContent());
-					
-					Node node7 = nodes.item(7);
-					Element childElement7 = (Element) node7;
-					vo.setKoreaLocalInfo(Integer.parseInt(childElement7.getTextContent()));
-					System.out.println(childElement7.getTextContent());
-					
-					Node node0 = nodes.item(0);
-					Element childElement0 = (Element) node0;
-					String timeBefore = childElement0.getTextContent();
-					String time = timeBefore.substring(1, 10).replace("-", "/");
-					vo.setKoreaTime(time);
-					System.out.println(time);
-					
+					NodeList nodeList = doc.getElementsByTagName("item");
+					for(int i=0; i<nodeList.getLength(); i++) {
+						Element el = (Element)nodeList.item(i);
+						CoronaVO vo = new CoronaVO();
+						
+						
+						NodeList nodes = el.getChildNodes();
+						Node node3 = nodes.item(3);
+						Element childElement3 = (Element) node3;
+						vo.setKoreaLocal(childElement3.getTextContent());
+						System.out.println(childElement3.getTextContent());
+						
+						Node node1 = nodes.item(1);
+						Element childElement1 = (Element) node1;
+						vo.setKoreaDeath(Integer.parseInt(childElement1.getTextContent()));
+						System.out.println(childElement1.getTextContent());
+						
+						Node node7 = nodes.item(7);
+						Element childElement7 = (Element) node7;
+						vo.setKoreaLocalInfo(Integer.parseInt(childElement7.getTextContent()));
+						System.out.println(childElement7.getTextContent());
+						
+						Node node0 = nodes.item(0);
+						Element childElement0 = (Element) node0;
+						String timeBefore = childElement0.getTextContent();
+						String time = timeBefore.substring(1, 10).replace("-", "/");
+						vo.setKoreaTime(time);
+						System.out.println(time);
+						
 //				Date type 삽입
 //				Node node0 = nodes.item(0);
 //				Element childElement0 = (Element) node0;
 //				vo.setDate(childElement0.getTextContent());
-					list.add(vo);	  
-				}
-				
-				
-				con = dataFactory.getConnection();
-				
-				// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
-				for(int i=0; i<list.size(); i++) {
-					String query="insert into korea_info (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_info_seq.nextval, ?,?,?,?)";
-					System.out.println(query);
+						list.add(vo);	  
+					}
 					
-					CoronaVO list_i = list.get(i);
 					
+					con = dataFactory.getConnection();
+					
+					// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
+					for(int i=0; i<list.size(); i++) {
+						String query="insert into korea (korea_id, korea_death, korea_local, korea_local_info, korea_time) values (korea_seq.nextval, ?,?,?,?)";
+						System.out.println(query);
+						
+						CoronaVO list_i = list.get(i);
+						
 //				java.sql.Date date = (java.sql.Date) list_i.get(0);
-					int deathCount = (int) list_i.getKoreaDeath();
-					System.out.println(deathCount);
-					String local = (String) list_i.getKoreaLocal();
-					System.out.println(local);
-					int localInfo = (int) list_i.getKoreaLocalInfo();
-					System.out.println(localInfo);
-					String time = list_i.getKoreaTime();
-					System.out.println(time);
+						int deathCount = (int) list_i.getDeath();
+						System.out.println(deathCount);
+						String local = (String) list_i.getLocal();
+						System.out.println(local);
+						int localInfo = (int) list_i.getLocal_info();
+						System.out.println(localInfo);
+						String time = list_i.getTime();
+						System.out.println(time);
+						
+						
+						pstmt = con.prepareStatement(query);
+						pstmt.setInt(1, deathCount);
+						pstmt.setString(2, local);
+						pstmt.setInt(3, localInfo);
+						pstmt.setString(4, time);
+						
+						pstmt.executeQuery();
+					}
 					
-					
-					pstmt = con.prepareStatement(query);
-					pstmt.setInt(1, deathCount);
-					pstmt.setString(2, local);
-					pstmt.setInt(3, localInfo);
-					pstmt.setString(4, time);
-					
-					pstmt.executeQuery();
+					if(pstmt != null) {
+						pstmt.close();
+					}
+					if(con != null) {
+						con.close();
+					}
+					if(sr != null) {
+						sr.close();
+					}			
+				}catch(Exception e) {
+					e.printStackTrace();
 				}
-				
-				if(pstmt != null) {
-					pstmt.close();
-				}
-				if(con != null) {
-					con.close();
-				}
-				if(sr != null) {
-					sr.close();
-				}			
-			}catch(Exception e) {
-				e.printStackTrace();
 			}
-		}else {
-			System.out.println("이미 최신 데이터 입니다");
+			
 		}
 	}
 	

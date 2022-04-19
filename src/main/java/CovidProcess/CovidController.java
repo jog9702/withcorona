@@ -49,6 +49,8 @@ public class CovidController extends HttpServlet {
 		try {
 			if (action.equals("/covidHomepage")) {
 				
+				covidService.updateToAuto();
+				
 				DecimalFormat fmt = new DecimalFormat("###,###");
 				
 				String todayConfirmedCase = fmt.format(covidService.todayConfirmedCase());

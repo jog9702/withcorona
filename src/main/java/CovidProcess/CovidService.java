@@ -46,10 +46,6 @@ public class CovidService {
 		return covidDao.loginCheck(id, pw);
 	}
 	
-	public void updateConfirmedCase() {
-		covidDao.updateConfirmedCase();
-	}
-	
 	public void qnaUpdate(BoardVO boardVO) {
 		covidDao.qnaUpdate(boardVO);
 	}
@@ -62,6 +58,10 @@ public class CovidService {
 		covidDao.dropTable();
 		covidDao.createTable();
 		covidDao.updateDBtoDate(before);
+	}
+	
+	public void updateToAuto() {
+		covidDao.updateToAuto();
 	}
 	
 	
