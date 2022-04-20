@@ -74,6 +74,16 @@ public class CovidService {
 		covidDao.foreignUpdateToAuto();
 	}
 	
+	public int foreignTodayConfirmedCase(String loc) {
+		return covidDao.foreignTodayConfirmedCase(loc);
+	}
+	
+	public int foreignTodayDeathCase(String loc) {
+		return covidDao.foreignTodayDeathCase(loc);
+	}
+	
+	
+	
 	List recursive(int pId, List list) {
 		List resultList = new ArrayList();
 		

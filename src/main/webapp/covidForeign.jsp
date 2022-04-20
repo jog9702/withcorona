@@ -91,25 +91,29 @@
     </header>
     <section>
         <div class="mgt">
-            <div class="fs1">지도 그림 넣고 대륙별 확진자 수 표시</div>
+            <div class="fs1">
+            	한국 ${ kor }<br>
+            	중국 ${ chi }<br>
+            	일본 ${ jap }<br>
+            </div>
         </div>
         
         <div>
             <div class="mgt- select">
 	        	<c:choose>
-	 	       		<c:when test="${ foreignLocCount == null }">
+	 	       		<c:when test="${ empty to }">
 	 	       			<div>지역을 입력하세요</div>
 	 	       		</c:when>
 	 	       		<c:otherwise>
-	 	       			<div>${ loc } 확진자수 : ${ foreignLocCount } 명</div>
-	 	       			<div class="fs--">사망자수 : ${ foreignlocDeath } 명</div>
+	 	       			<div>${ loc } 확진자수 : ${ pick } 명</div>
+	 	       			<div class="fs--">사망자수 : ${ pickD } 명</div>
 	 	       		</c:otherwise>
 	        	</c:choose>
             </div>
 
             <div class="select">
         	<form action="/withcorona/foreignSelection">
-				<input type="text" value="국가를 입력하세요">
+				<input type="text" value="국가를 입력하세요" name="loc">
 				<input type="submit" value="조회" />
         	</form>
         </div>
