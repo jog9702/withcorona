@@ -16,7 +16,7 @@
         margin-top: 240px;
      }
     .mglr{
-        margin: 0px 80px;
+        margin: 0px 30px;
     }
     .flex{
         display: flex;
@@ -66,6 +66,9 @@
         width: 800px;
         text-align: center;
     }
+    .fs--{
+    	font-size: 15px;
+    }
 
 
 
@@ -87,37 +90,36 @@
     </div>
     </header>
     <section>
-		<div class="mgt">
-            <div class="fs1">일일 확진자수 : ${ todayCount } </div>
-            <div class="flex1">
-                <div class="mglr">연간 확진자수 : ${ monthCount }</div>
-                <div class="mglr">월간 확진자수 : ${ yearCount }</div>
-            </div>
+        <div class="mgt">
+            <div class="fs1">지도 그림 넣고 대륙별 확진자 수 표시</div>
         </div>
+        
         <div>
             <div class="mgt- select">
-        	<% 
-        	
-        		if(request.getAttribute("foreignLocCount")== null){
-        			out.println("지역을 입력하세요");
-        		}else{
-        			%> ${ loc } : ${ foreignLocCount } 명 <%        		
-        		}
-        	%> 
+	        	<c:choose>
+	 	       		<c:when test="${ foreignLocCount == null }">
+	 	       			<div>지역을 입력하세요</div>
+	 	       		</c:when>
+	 	       		<c:otherwise>
+	 	       			<div>${ loc } 확진자수 : ${ foreignLocCount } 명</div>
+	 	       			<div class="fs--">사망자수 : ${ foreignlocDeath } 명</div>
+	 	       		</c:otherwise>
+	        	</c:choose>
             </div>
 
             <div class="select">
         	<form action="/withcorona/foreignSelection">
-				<select name="loc">
-					<option value="미국" selected>미국</option>
-					<option value="중국">중국</option>
-					<option value="일본">일본</option>
-				</select>
+				<input type="text" value="국가를 입력하세요">
 				<input type="submit" value="조회" />
         	</form>
         </div>
 
         </div>
+        
+        <form action="/withcorona/fUpdate">
+        	<input type="text" name="before2" value="yyyymmdd">
+        	<input type="submit" value="업데이트">
+        </form>
     </section>
 </body>
 </html>

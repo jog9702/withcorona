@@ -4,7 +4,6 @@ public class KoreaVO {
 	
 	// 국내 정보
 	private int koreaId;
-	private int KoreaInfo;
 	private String koreaLocal;
 	private int koreaLocalInfo;
 	private int koreaDeath;
@@ -16,12 +15,6 @@ public class KoreaVO {
 	}
 	public void setKoreaId(int koreaId) {
 		this.koreaId = koreaId;
-	}
-	public int getKoreaInfo() {
-		return KoreaInfo;
-	}
-	public void setKoreaInfo(int koreaInfo) {
-		KoreaInfo = koreaInfo;
 	}
 	public int getKoreaDeath() {
 		return koreaDeath;

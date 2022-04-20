@@ -46,6 +46,8 @@ public class CovidController extends HttpServlet {
 		CovidService covidService = new CovidService();
 //		BoardVO	boardVO = new BoardVO();
 		
+
+		
 		try {
 			if (action.equals("/covidHomepage")) {
 				
@@ -83,6 +85,8 @@ public class CovidController extends HttpServlet {
 				nextPage = "/covidKorea.jsp";
 				
 			}else if(action.equals("/covidForeign")){
+				
+				covidService.foreignUpdateToAuto();
 				
 				nextPage = "/covidForeign.jsp";
 				
@@ -169,6 +173,12 @@ public class CovidController extends HttpServlet {
 				
 				covidService.updateDBtoDate(request.getParameter("before"));
 				nextPage="/covidKorea.jsp";
+				
+			}else if(action.equals("/fUpdate")){
+				//해결
+				covidService.foreignUpdateDBtoDate(request.getParameter("before2"));
+				System.out.println("123");
+				nextPage="/covidForeign.jsp";
 				
 			}else {	
 				nextPage = "/deny.jsp";

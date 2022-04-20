@@ -64,6 +64,15 @@ public class CovidService {
 		covidDao.updateToAuto();
 	}
 	
+	public void foreignUpdateDBtoDate(String before) {
+		covidDao.foreignDropTable();
+		covidDao.foreignCreateTable();
+		covidDao.foreignUpdateDBtoDate(before);
+	}
+	
+	public void foreignUpdateToAuto() {
+		covidDao.foreignUpdateToAuto();
+	}
 	
 	List recursive(int pId, List list) {
 		List resultList = new ArrayList();
