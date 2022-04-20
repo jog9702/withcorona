@@ -137,29 +137,29 @@ public class CovidController extends HttpServlet {
 				
 				
 				// 게시판 등록창이동
-			}else if(action.equals("/qnaForm")){
+			}else if(action.equals("/qnaForm.do")){
 				
 				nextPage = "/withcorona/qnaForm.jsp";
 				
 				// 게시판 등록
-			}else if(action.equals("/qnaUpdate")){
-				
-				BoardVO	boardVo = new BoardVO();
-				String title = request.getParameter("title");
-				String desc = request.getParameter("desc");
-				
-				Integer id = (Integer) session.getAttribute("empno");
-				if(id == null) id = 7839;
-						
-				boardVo = new BoardVO();
-				boardVo.setBoardParentno(0);
-				boardVo.setBoardId(id);
-				boardVo.setBoardTitle(title);
-				boardVo.setBoardDesc(desc);
-				
-				covidService.qnaUpdate(boardVo);
-				
-				nextPage = "/board/listArticles.do";
+//			}else if(action.equals("/qnaUpdate")){
+//				
+//				BoardVO	boardVo = new BoardVO();
+//				String title = request.getParameter("title");
+//				String desc = request.getParameter("desc");
+//				
+//				Integer id = (Integer) session.getAttribute("empno");
+//				if(id == null) id = 7839;
+//						
+//				boardVo = new BoardVO();
+//				boardVo.setBoardParentno(0);
+//				boardVo.setBoardId(id);
+//				boardVo.setBoardTitle(title);
+//				boardVo.setBoardDesc(desc);
+//				
+//				covidService.qnaUpdate(boardVo);
+//				
+//				nextPage = "/board/listArticles.do";
 				
 				
 				
@@ -182,6 +182,7 @@ public class CovidController extends HttpServlet {
 			e.printStackTrace();
 		}
 	}
+		
 	
 
 }
