@@ -1,22 +1,24 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"
+	import = "java.util.List"  
 %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>확진자 상세</title>
+<title>COVID-19 | 검사소 검색</title>
 <style>
     .fixed{
         position: fixed;
-        margin-top: -230px;
+        margin-top: -145px;
     }
     .mgt{
-        margin-top: 240px;
+        margin-top: 155px;
      }
     .mglr{
-        margin: 0px 30px;
+        margin: 0px 80px;
     }
     .flex{
         display: flex;
@@ -58,24 +60,19 @@
 	a:active {
 	    text-decoration: none;
 	}
-    .mgt-{
-        margin-top: 30px;
-        font-size: 30px;
-    }
-    .select{
-        width: 800px;
-        text-align: center;
-    }
-    .fs--{
-    	font-size: 15px;
-    }
+	.tb{
+		width: 800px;
+	}
+	.mgt-30{
+		margin-top: 30px;
+	}
 
 
 
 </style>
 </head>
 <body>
-    <header>
+   <header>
     <div class="fixed">
         <div class="fs">
             <a href="/withcorona/covidHomepage">COVID-19</a>
@@ -84,46 +81,18 @@
             <div><a href="/withcorona/covidKorea">국내 상세</a></div>
             <div><a href="/withcorona/covidForeign">해외 상세</a></div>
             <div><a href="/withcorona/search">가까운 검사소 찾기</a></div>
-            <div><a href="/withcorona/qna">문의/제보</a></div>
+            <div><a href="/withcorona/login">문의/제보</a></div>
         </div>
         <hr>
     </div>
     </header>
     <section>
         <div class="mgt">
-            <div class="fs1">
-            	한국 ${ kor }<br>
-            	중국 ${ chi }<br>
-            	일본 ${ jap }<br>
-            </div>
-        </div>
-        
-        <div>
-            <div class="mgt- select">
-	        	<c:choose>
-	 	       		<c:when test="${ empty to }">
-	 	       			<div>지역을 입력하세요</div>
-	 	       		</c:when>
-	 	       		<c:otherwise>
-	 	       			<div>${ loc } 확진자수 : ${ pick } 명</div>
-	 	       			<div class="fs--">사망자수 : ${ pickD } 명</div>
-	 	       		</c:otherwise>
-	        	</c:choose>
-            </div>
-
-            <div class="select">
-        	<form action="/withcorona/foreignSelection">
-				<input type="text" value="국가를 입력하세요" name="loc">
+        	<form action="http://localhost:8080/withcorona/selectClinic">
+				<input type="text" name="loc">
 				<input type="submit" value="조회" />
         	</form>
-        </div>
-
-        </div>
-        
-        <form action="/withcorona/fUpdate">
-        	<input type="text" name="before2" value="yyyymmdd">
-        	<input type="submit" value="업데이트">
-        </form>
+        </div>	
     </section>
 </body>
 </html>

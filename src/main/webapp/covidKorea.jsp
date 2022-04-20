@@ -132,15 +132,6 @@
 
         </div>
         
-                
-        <c:choose>
-        	<c:when test="${ 1 == 1 }"> 
-		        <div>
-		        	<div><a href="/withcorona/update">update</a></div>
-		        </div>
-        	</c:when>
-        </c:choose>
-        
         <form action="/withcorona/updateToDate">
         	<input type="text" name="before" value="yyyymmdd">
         	<input type="submit" value="업데이트">

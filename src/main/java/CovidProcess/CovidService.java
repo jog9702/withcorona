@@ -46,10 +46,6 @@ public class CovidService {
 		return covidDao.loginCheck(id, pw);
 	}
 	
-	public void updateConfirmedCase() {
-		covidDao.updateConfirmedCase();
-	}
-	
 	public void qnaUpdate(BoardVO boardVO) {
 		covidDao.qnaUpdate(boardVO);
 	}
@@ -63,6 +59,29 @@ public class CovidService {
 		covidDao.createTable();
 		covidDao.updateDBtoDate(before);
 	}
+	
+	public void updateToAuto() {
+		covidDao.updateToAuto();
+	}
+	
+	public void foreignUpdateDBtoDate(String before) {
+		covidDao.foreignDropTable();
+		covidDao.foreignCreateTable();
+		covidDao.foreignUpdateDBtoDate(before);
+	}
+	
+	public void foreignUpdateToAuto() {
+		covidDao.foreignUpdateToAuto();
+	}
+	
+	public int foreignTodayConfirmedCase(String loc) {
+		return covidDao.foreignTodayConfirmedCase(loc);
+	}
+	
+	public int foreignTodayDeathCase(String loc) {
+		return covidDao.foreignTodayDeathCase(loc);
+	}
+	
 	
 	
 	List recursive(int pId, List list) {

@@ -1,10 +1,9 @@
 package vo;
-
 public class ForeignVO {
-	
-	// 해외 정보
+
 	private int foreignId;
-	private String foreignLocal;
+	private String foreignLocalO;
+	private String foreignLocalI;
 	private int foreignLocalInfo;
 	private int foreignDeath;
 	private String foreignTime;
@@ -16,23 +15,29 @@ public class ForeignVO {
 	public void setForeignId(int foreignId) {
 		this.foreignId = foreignId;
 	}
-	public int getForeignDeath() {
-		return foreignDeath;
+	public String getForeignLocalO() {
+		return foreignLocalO;
 	}
-	public void setForeignDeath(int foreignDeath) {
-		this.foreignDeath = foreignDeath;
+	public void setForeignLocalO(String foreignLocalO) {
+		this.foreignLocalO = foreignLocalO;
 	}
-	public String getForeignLocal() {
-		return foreignLocal;
+	public String getForeignLocalI() {
+		return foreignLocalI;
 	}
-	public void setForeignLocal(String foreignLocal) {
-		this.foreignLocal = foreignLocal;
+	public void setForeignLocalI(String foreignLocalI) {
+		this.foreignLocalI = foreignLocalI;
 	}
 	public int getForeignLocalInfo() {
 		return foreignLocalInfo;
 	}
 	public void setForeignLocalInfo(int foreignLocalInfo) {
 		this.foreignLocalInfo = foreignLocalInfo;
+	}
+	public int getForeignDeath() {
+		return foreignDeath;
+	}
+	public void setForeignDeath(int foreignDeath) {
+		this.foreignDeath = foreignDeath;
 	}
 	public String getForeignTime() {
 		return foreignTime;
