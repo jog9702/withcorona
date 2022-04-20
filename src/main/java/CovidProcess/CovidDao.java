@@ -175,7 +175,7 @@ public class CovidDao {
 						pstmt.setInt(3, localInfo);
 						pstmt.setString(4, time);
 
-						pstmt.executeQuery();
+						pstmt.executeUpdate();
 					}
 
 					if (pstmt != null) {
@@ -283,7 +283,7 @@ public class CovidDao {
 						pstmt.setInt(4, localInfo);
 						pstmt.setString(5, time);
 
-						pstmt.executeQuery();
+						pstmt.executeUpdate();
 					}
 
 					if (pstmt != null) {
@@ -310,7 +310,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			String query = "drop table korea_info";
 			pstmt = con.prepareStatement(query);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 
 			if (pstmt != null) {
 				pstmt.close();
@@ -331,7 +331,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			String query = "create table korea_info(korea_id number(10) primary key, korea_death number(10), korea_local varchar2(1000), korea_local_info number(10), korea_time date)";
 			pstmt = con.prepareStatement(query);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 
 			if (pstmt != null) {
 				pstmt.close();
@@ -445,7 +445,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			String query = "drop table foreign_info";
 			pstmt = con.prepareStatement(query);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 
 			if (pstmt != null) {
 				pstmt.close();
@@ -465,7 +465,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			String query = "create table foreign_info(foreign_id number(10) primary key, foreign_death number(10), foreign_local_o varchar2(1000), foreign_local_i varchar2(1000), foreign_local_info number(10), foreign_time date)";
 			pstmt = con.prepareStatement(query);
-			pstmt.executeQuery();
+			pstmt.executeUpdate();
 
 			if (pstmt != null) {
 				pstmt.close();
@@ -569,7 +569,7 @@ public class CovidDao {
 				pstmt.setInt(4, localInfo);
 				pstmt.setString(5, time);
 
-				pstmt.executeQuery();
+				pstmt.executeUpdate();
 			}
 
 			if (pstmt != null) {
