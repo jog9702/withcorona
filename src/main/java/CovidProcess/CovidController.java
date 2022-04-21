@@ -142,6 +142,7 @@ public class CovidController extends HttpServlet {
 
 			}else if (action.equals("/search")) {
 				//보건소 정보 검색하는 페이지로 이동 - 남모세
+				session.setAttribute("action", action);
 				nextPage = "/clinicSearch.jsp";
 				
 			}else if(action.equals("/selectClinic")){
@@ -305,6 +306,8 @@ public class CovidController extends HttpServlet {
 				request.setAttribute("pageNum", pageNum);
 				request.setAttribute("countPerPage", countPerPage);
 				
+				session.setAttribute("action", action);
+				
 				nextPage = "/qna.jsp";
 				
 				
@@ -348,6 +351,9 @@ public class CovidController extends HttpServlet {
 				}
 				
 				request.setAttribute("qna", boardVo);
+				
+				session.setAttribute("action", action);
+				
 				nextPage = "/qnaView.jsp";
 				
 				// 게시판 수정페이지 이동
