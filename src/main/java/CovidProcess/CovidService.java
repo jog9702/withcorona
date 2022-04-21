@@ -46,14 +46,6 @@ public class CovidService {
 		return covidDao.loginCheck(id, pw);
 	}
 	
-	public void qnaUpdate(BoardVO boardVO) {
-		covidDao.qnaUpdate(boardVO);
-	}
-	
-	public int qnaTotal() {
-		return covidDao.qnaTotal();
-	}
-	
 	public void updateDBtoDate(String before) {
 		covidDao.dropTable();
 		covidDao.createTable();
@@ -118,6 +110,28 @@ public class CovidService {
 			}
 		}
 		return articlesList;
+	}
+	
+	public void qnaInsert(BoardVO boardVO) {
+		covidDao.qnaInsert(boardVO);
+	}
+	
+	public int qnaTotal() {
+		return covidDao.qnaTotal();
+	}
+	
+	public BoardVO qnaView(int boardId) {
+		BoardVO boardVo = covidDao.qnaView(boardId);
+		
+		return boardVo;
+	}
+	
+	public void qnaUpdate2(BoardVO boardVo) {
+		covidDao.qnaUpdate(boardVo);
+	}
+	
+	public void qnaDelete(int boardId) {
+		covidDao.qnaDelete(boardId);
 	}
 	
 }

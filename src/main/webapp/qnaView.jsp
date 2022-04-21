@@ -1,10 +1,35 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="contextPath" value="${ pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>COVID-19</title>
+<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+<script>
+	function goList(){
+		location.href="${ contextPath }/withcorona/qna";
+	}
+	
+	function goUpdate(){
+		location.href="${ contextPath }/withcorona/qnaUpdate?boardId=${qna.boardId}";
+	}
+	
+	function goDelete(){
+		var isDel = window.confirm("정말 삭제하시겠습니까?");
+		if(isDel){
+			location.href="${ contextPath }/withcorona/qnaDelete?boardId=${qna.boardId}";
+		}
+	}
+	
+	function goComment(){
+		location.href="${ contextPath }/withcorona/qnaComment?boardParentNO=${qna.boardId}";
+	}
+</script>
 <style>
     .fixed{
         position: fixed;
@@ -62,7 +87,7 @@
 		width:800px;
 		text-align: right;
 	}
-
+	
 </style>
 </head>
 <body>
@@ -80,14 +105,18 @@
         <hr>
     </div>
     </header>
-	<h1>새글 쓰기</h1>
-	<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaUpdate">
-		제목 : <input type="text" name="title"><br>
+    <section>
+		작성자 : ${ qna.userId }<br>
+		제목 : ${ qna.boardTitle }<br> 
 		내용 : <br>
-		<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
+		<div style="border:1px black solid; padding:10px;">
+		${ qna.boardDesc }
+		</div>
 		<br><br>
-		<input type="submit" value="글쓰기">
-		<input type="button" value="목록보기" onclick="/withcorona/qna.jsp">
-	</form>
+		<input type="button" value="수정하기" onclick="goUpdate();">
+		<input type="button" value="삭제하기" onclick="goDelete();">
+		<input type="button" value="답글쓰기" onclick="goComment();">
+		<input type="button" value="목록보기" onclick="goList();">
+    </section>
 </body>
 </html>
