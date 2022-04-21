@@ -1099,7 +1099,7 @@ public class CovidDao {
 		}
 	}
 	
-	// 게시판 글 전체 개수
+	// 게시판 글 보여주는 제한걸기
 	public int qnaTotal() {
 		
 		int total = 0;

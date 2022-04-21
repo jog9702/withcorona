@@ -124,10 +124,18 @@
 		${ qna.boardDesc }
 		</div>
 		<br><br>
-		<input type="button" value="수정하기" onclick="goUpdate();">
-		<input type="button" value="삭제하기" onclick="goDelete();">
-		<input type="button" value="답글쓰기" onclick="goComment();">
-		<input type="button" value="목록보기" onclick="goList();">
+		<div>
+        	<c:if test="${ qna.userId eq vo.userId }">
+        		<input type="button" value="수정하기" onclick="goUpdate();">
+				<input type="button" value="삭제하기" onclick="goDelete();">
+				<input type="button" value="답글쓰기" onclick="goComment();">
+				<input type="button" value="목록보기" onclick="goList();">
+			</c:if>
+        	<c:if test="${ !(qna.userId eq vo.userId) }">
+				<input type="button" value="답글쓰기" onclick="goComment();">
+				<input type="button" value="목록보기" onclick="goList();">
+			</c:if>
+        </div>
     </section>
 </body>
 </html>
