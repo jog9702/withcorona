@@ -1,5 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -91,7 +94,8 @@
         <hr>
     </div>
     </header>
-	<c:if test="${ vo.userAuth == null }">
+    <setion>
+		<c:if test="${ vo.userAuth == null }">
     		<script>
     			alert("로그인을 해야합니다.");
     			location.href="/withcorona/login";
