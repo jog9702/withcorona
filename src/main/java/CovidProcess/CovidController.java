@@ -10,9 +10,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
-//import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -125,54 +125,54 @@ public class CovidController extends HttpServlet {
 				nextPage = "/clinicSearch.jsp";
 				
 			}else if(action.equals("/selectClinic")){
-//				//검색한 보건소 정보를 json에서 바로 표시해주는 페이지 - 남모세
-//				
-//				String loc = request.getParameter("loc");
-//				
-//				String url = "http://api.odcloud.kr/api/3072692/v1/uddi:9d420e87-8e70-4fb0-a54a-be1244249b2e_201909271427?page=1&perPage=3564&serviceKey=sI726jPqcVCuRbjGbsSgId%2BsznYVz20Kk7JJ0RJ7R09QQlrhYyYeeRWxOYXQqeWZXt2jQggrOrj5K2JytdxpsQ%3D%3D";
-//				String result = getStringFromURL(url);
-//				//lib에 json-simple.jar파일 넣어야함 - 남모세
-//				JSONParser jsonParser = new JSONParser();
-//				List<ClinicVO> list = new ArrayList();
-//
-//				try {
-//					Object obj = jsonParser.parse(result);
-//
-//					if(obj instanceof JSONObject) {
-//						JSONObject json = new JSONObject();
-//						json = (JSONObject) obj;
-//						
-//						JSONArray json_arr = (JSONArray) json.get("data");
-//						
-//						for(int i=0; i<json_arr.size(); i++) {
-//							JSONObject item = (JSONObject) json_arr.get(i);
-//							String local = (String) item.get("시도");
-//							String name = (String) item.get("보건기관명");
-//							String info = (String) item.get("주소");
-//							String tel = (String) item.get("대표전화번호");
-//							
-//							if(info.contains(loc)) {
-//								ClinicVO vo = new ClinicVO();
-//								
-//								vo.setClinicLocal(local);
-//								vo.setClinicName(name);
-//								vo.setClinicInfo(info);
-//								vo.setClinicTel(tel);
-//								list.add(vo);
-//							}
-//						}
-//						
-//					} else if(obj instanceof JSONArray) {
-//						
-//					}
-//					
-//				} catch(Exception e) {
-//					e.printStackTrace();
-//				}
-//				
-//				request.setAttribute("list", list);
-//				nextPage = "/clinicInfo.jsp";
-//				
+				//검색한 보건소 정보를 json에서 바로 표시해주는 페이지 - 남모세
+				
+				String loc = request.getParameter("loc");
+				
+				String url = "http://api.odcloud.kr/api/3072692/v1/uddi:9d420e87-8e70-4fb0-a54a-be1244249b2e_201909271427?page=1&perPage=3564&serviceKey=sI726jPqcVCuRbjGbsSgId%2BsznYVz20Kk7JJ0RJ7R09QQlrhYyYeeRWxOYXQqeWZXt2jQggrOrj5K2JytdxpsQ%3D%3D";
+				String result = getStringFromURL(url);
+				//lib에 json-simple.jar파일 넣어야함 - 남모세
+				JSONParser jsonParser = new JSONParser();
+				List<ClinicVO> list = new ArrayList();
+
+				try {
+					Object obj = jsonParser.parse(result);
+
+					if(obj instanceof JSONObject) {
+						JSONObject json = new JSONObject();
+						json = (JSONObject) obj;
+						
+						JSONArray json_arr = (JSONArray) json.get("data");
+						
+						for(int i=0; i<json_arr.size(); i++) {
+							JSONObject item = (JSONObject) json_arr.get(i);
+							String local = (String) item.get("시도");
+							String name = (String) item.get("보건기관명");
+							String info = (String) item.get("주소");
+							String tel = (String) item.get("대표전화번호");
+							
+							if(info.contains(loc)) {
+								ClinicVO vo = new ClinicVO();
+								
+								vo.setClinicLocal(local);
+								vo.setClinicName(name);
+								vo.setClinicInfo(info);
+								vo.setClinicTel(tel);
+								list.add(vo);
+							}
+						}
+						
+					} else if(obj instanceof JSONArray) {
+						
+					}
+					
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+				request.setAttribute("list", list);
+				nextPage = "/clinicInfo.jsp";
+				
 			}else if(action.equals("/login")) {
 				//로그인 페이지로 이동 - 남모세
 				nextPage="/login.jsp";
