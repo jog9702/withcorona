@@ -200,7 +200,7 @@ public class CovidController extends HttpServlet {
 				//로그아웃 하기 - 남모세
 				session.invalidate();
 				
-				nextPage="/homepage.jsp";
+				nextPage="/withcorona/covidHomepage";
 				
 			}else if(action.equals("/loginCheck")) {
 				//로그인 시 가입된 id인지 확인 하는 Controller - 남모세
