@@ -62,6 +62,9 @@
 		width:800px;
 		text-align: right;
 	}
+	.login{
+		float: right;
+	}
 
 </style>
 </head>
@@ -70,6 +73,14 @@
     <div class="fixed">
         <div class="fs">
             <a href="/withcorona/covidHomepage">COVID-19</a>
+        </div>
+        <div class="login">
+        	<c:if test="${ vo.userAuth == null }">
+				<a href="/withcorona/login"><input type="button" value="로그인"></a>
+			</c:if>
+        	<c:if test="${ vo.userAuth != null }">
+				<a href="/withcorona/logout"><input type="button" value="로그아웃"></a>
+			</c:if>
         </div>
         <div class="flex">
             <div><a href="/withcorona/covidKorea">국내 상세</a></div>
@@ -80,14 +91,24 @@
         <hr>
     </div>
     </header>
-	<h1>새글 쓰기</h1>
-	<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaInsert">
-		제목 : <input type="text" name="title"><br>
-		내용 : <br>
-		<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
-		<br><br>
-		<input type="submit" value="글쓰기">
-		<input type="button" value="목록보기" onclick="/withcorona/qna.jsp">
-	</form>
+	<c:if test="${ vo.userAuth == null }">
+    		<script>
+    			alert("로그인을 해야합니다.");
+    			location.href="/withcorona/login";
+    		</script>
+    		
+    	</c:if>
+    	<c:if test="${ vo.userAuth != null }">
+    		<h1>새글 쓰기</h1>
+			<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaInsert">
+			제목 : <input type="text" name="title"><br>
+			내용 : <br>
+			<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
+			<br><br>
+			<input type="submit" value="글쓰기">
+			<input type="button" value="목록보기" onclick="/withcorona/qna.jsp">
+		</form>
+    	</c:if>
+	</section>
 </body>
 </html>
