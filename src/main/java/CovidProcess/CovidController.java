@@ -216,79 +216,29 @@ public class CovidController extends HttpServlet {
 				
 				
 				// 게시판 등록창이동
-			}else if(action.equals("/qnaForm")){
+			}else if(action.equals("/qnaForm.do")){
 				
-				nextPage = "/qnaForm.jsp";
+				nextPage = "/withcorona/qnaForm.jsp";
 				
 				// 게시판 등록
-			}else if(action.equals("/qnaInsert")){
-				
-				BoardVO	boardVo = new BoardVO();
-				String title = request.getParameter("title");
-				String desc = request.getParameter("desc");
-				
-				String userId = (String) session.getAttribute("user_id");
+//			}else if(action.equals("/qnaUpdate")){
+//				
+//				BoardVO	boardVo = new BoardVO();
+//				String title = request.getParameter("title");
+//				String desc = request.getParameter("desc");
+//				
+//				Integer id = (Integer) session.getAttribute("empno");
 //				if(id == null) id = 7839;
-						
-				boardVo = new BoardVO();
-				boardVo.setBoardParentno(0);
-				boardVo.setUserId(userId);
-				boardVo.setBoardTitle(title);
-				boardVo.setBoardDesc(desc);
-				
-				covidService.qnaInsert(boardVo);
-				
-				nextPage = "/qna.jsp";
-				
-				// 게시판 상세 조회
-			}else if(action.equals("/qnaView")){
-				BoardVO	boardVo = new BoardVO();
-				String boardId = request.getParameter("boardId");
-				
-				boardVo = covidService.qnaView(Integer.parseInt(boardId));
-				
-				// 텍스트 에어리어 줄넘김
-				String desc = boardVo.getBoardDesc();
-				if(desc != null && desc.length() > 0) {
-					desc = desc.replaceAll("\n", "<br>");
-					boardVo.setBoardDesc(desc);					
-				}
-				
-				request.setAttribute("article", boardVo);
-				nextPage = "/qnaView.jsp";
-				
-				// 게시판 수정페이지 이동
-			}else if(action.equals("/qnaUpdate")){
-				BoardVO	boardVo = new BoardVO();
-				String boardId = request.getParameter("boardId");
-				boardVo = covidService.qnaView(Integer.parseInt(boardId));
-				request.setAttribute("qna", boardVo);
-				
-				nextPage = "/board01/modifyArticle.jsp";
-				
-				// 게시판 수정
-			}else if(action.equals("/qnaUpdate2")){
-				BoardVO	boardVo = new BoardVO();
-				String boardId = request.getParameter("boardId");
-				String title = request.getParameter("title");
-				String desc = request.getParameter("desc");
-				
-				boardVo.setBoardId(Integer.parseInt(boardId));
-//				boardVo.setUserId(userId);
-				boardVo.setBoardTitle(title);
-				boardVo.setBoardDesc(desc);
-				
-				covidService.qnaUpdate2(boardVo);
-				
-				nextPage = "/qnaView?boardId=" + boardId;
-				
-				// 게시판 삭제
-			}else if(action.equals("/qnaDelete")){
-				
-				String boardId = request.getParameter("boardId");
-				covidService.qnaDelete(Integer.parseInt(boardId));
-				
-				nextPage = "/qna.jsp";
+//						
+//				boardVo = new BoardVO();
+//				boardVo.setBoardParentno(0);
+//				boardVo.setBoardId(id);
+//				boardVo.setBoardTitle(title);
+//				boardVo.setBoardDesc(desc);
+//				
+//				covidService.qnaUpdate(boardVo);
+//				
+//				nextPage = "/board/listArticles.do";
 				
 				
 				

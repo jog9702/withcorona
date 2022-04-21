@@ -81,7 +81,7 @@
     </div>
     </header>
 	<h1>새글 쓰기</h1>
-	<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaUpdate">
+	<form name="articleForm" method="post" action="${ contextPath }/withcorona/qnaUpdate">
 		제목 : <input type="text" name="title"><br>
 		내용 : <br>
 		<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
