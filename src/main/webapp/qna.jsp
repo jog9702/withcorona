@@ -144,6 +144,39 @@
 			</c:choose>
 		</tbody>
     	</table>
+    	<div style="text-align:center">
+		<%
+			int total = (int)request.getAttribute("total");
+			int pageNum = (int)request.getAttribute("pageNum");
+			int countPerPage = (int)request.getAttribute("countPerPage");
+
+			double totalpaging = Math.ceil((double)total / countPerPage);
+			
+			final int section = 2;
+			int postion = (int)Math.ceil((double)pageNum / section);
+			int begin = ((postion - 1) * section) + 1;
+			int end = begin + section - 1;
+			if(end > totalpaging){
+				end = (int)totalpaging;
+			}
+			String style = " style='color:red; font-weight:bold;'";
+			pageContext.setAttribute("style", style);
+		%>
+		<%if(begin != 1){%>
+			<a href="${ contextPath }/withcorona/qna?pageNum=<%= begin-1 %>&countPerPage=5" style="margin:10px;">[이전]</a>
+		<% } %>
+		<c:forEach begin="<%= begin %>" end="<%= end %>" var="paging1">
+			<c:if test="${ pageNum == paging1 }">
+				<a ${ sytle }href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=5" style="margin:10px;">[${ paging1 }]</a>			
+			</c:if>
+			<c:if test="${ pageNum != paging1 }">
+				<a href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=5" style="margin:10px;">[${ paging1 }]</a>
+			</c:if>
+		</c:forEach>
+		<%if(end != totalpaging){%>
+			<a href="${ contextPath }/withcorona/qna?pageNum=<%= end+1 %>&countPerPage=5" style="margin:10px;">[다음]</a>
+		<% } %>
+	</div>
     </section>
     	<a href="${ contextPath }/withcorona/qnaForm">
 		<p>글쓰기</p>
