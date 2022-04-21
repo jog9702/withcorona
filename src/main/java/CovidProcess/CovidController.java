@@ -76,11 +76,14 @@ public class CovidController extends HttpServlet {
 				session.setAttribute("yearCount", yearConfirmedCase);
 				session.setAttribute("todayDeath", todayDeath);
 				
+				session.setAttribute("action", action);
+
 				nextPage = "/homepage.jsp";
 				
-				nextPage = "/homepage.jsp";
 			} else if(action.equals("/covidKorea")){
 				
+				session.setAttribute("action", action);
+
 				nextPage = "/covidKorea.jsp";
 				
 			}else if(action.equals("/koreaSelection")){
@@ -93,6 +96,8 @@ public class CovidController extends HttpServlet {
 				int locDeath = covidService.todayDeath(loc);
 				request.setAttribute("locDeath", locDeath);
 				
+				session.setAttribute("action", action);
+
 				nextPage = "/covidKorea.jsp";
 				
 			}else if(action.equals("/covidForeign")){
@@ -104,6 +109,8 @@ public class CovidController extends HttpServlet {
 				request.setAttribute("chi", fmt.format(covidService.foreignTodayConfirmedCase("중국")));
 				request.setAttribute("jap", fmt.format(covidService.foreignTodayConfirmedCase("일본")));
 				
+				session.setAttribute("action", action);
+
 				nextPage = "/covidForeign.jsp";
 				
 			}else if(action.equals("/foreignSelection")){
@@ -118,6 +125,8 @@ public class CovidController extends HttpServlet {
 				request.setAttribute("pickD", fmt.format(covidService.foreignTodayDeathCase(loc)));
 				request.setAttribute("to", "to");
 				
+				session.setAttribute("action", action);
+
 				nextPage = "/covidForeign.jsp";
 				
 			}else if(action.equals("/updateToDate")){

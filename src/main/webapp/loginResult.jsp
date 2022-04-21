@@ -105,7 +105,7 @@
 			</tr>
 			<tr>
 				<td>
-					<a href="/withcorona/covidHomepage">메인화면으로</a>
+					<a href="/withcorona/covidHomepage${ action }">기존화면으로</a>
 				</td>
 			</tr>
 		</table>    	
