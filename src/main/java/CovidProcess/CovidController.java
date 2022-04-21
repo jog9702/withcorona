@@ -183,7 +183,11 @@ public class CovidController extends HttpServlet {
 				
 				request.setAttribute("list", list);
 				nextPage = "/clinicInfo.jsp";
+<<<<<<< HEAD
 //				
+=======
+				
+>>>>>>> origin/main
 			}else if(action.equals("/login")) {
 				//로그인 페이지로 이동 - 남모세
 				nextPage="/login.jsp";

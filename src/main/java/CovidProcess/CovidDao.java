@@ -99,7 +99,7 @@ public class CovidDao {
 			token = (token.substring(0, 8) + tmpDate2).replace("-", "");
 			System.out.println(token);
 
-			if (Integer.parseInt(token) < Integer.parseInt(dateToStr)) {
+			if (Integer.parseInt(token) <= Integer.parseInt(dateToStr)) {
 
 				String url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19SidoInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
 				url += "startCreateDt=" + token + "&endCreateDt=" + dateToStr;
@@ -239,7 +239,7 @@ public class CovidDao {
 			token = (token.substring(0, 8) + tmpDate2).replace("-", "");
 			System.out.println(token);
 
-			if (Integer.parseInt(token) < Integer.parseInt(dateToStr)) {
+			if (Integer.parseInt(token) <= Integer.parseInt(dateToStr)) {
 
 				String url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19NatInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
 				url += "startCreateDt=" + token + "&endCreateDt=" + dateToStr;
