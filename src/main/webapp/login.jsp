@@ -70,25 +70,34 @@
     <header>
     <div class="fixed">
         <div class="fs">
-            <a href="/pot_220425/pot/covidHomepage">COVID-19</a>
+            <a href="/withcorona/covidHomepage">COVID-19</a>
+        </div>
+        <div class="login">
+        	<c:if test="${ vo.userAuth == null }">
+				<a href="/withcorona/login"><input type="button" value="로그인"></a>
+			</c:if>
+        	<c:if test="${ vo.userAuth != null }">
+				<a href="/withcorona/logout"><input type="button" value="로그아웃"></a>
+			</c:if>
         </div>
         <div class="flex">
-            <div><a href="/pot_220425/pot/covidKorea">국내 상세</a></div>
-            <div><a href="/pot_220425/pot/covidForeign">해외 상세</a></div>
-            <div><a href="/pot_220425/board/search">가까운 검사소 찾기</a></div>
-            <div><a href="/pot_220425/board/qna">문의/제보</a></div>
+            <div><a href="/withcorona/covidKorea">국내 상세</a></div>
+            <div><a href="/withcorona/covidForeign">해외 상세</a></div>
+            <div><a href="/withcorona/search">가까운 검사소 찾기</a></div>
+            <div><a href="/withcorona/login">문의/제보</a></div>
         </div>
         <hr>
     </div>
     </header>
     <section>
     	<div class="mgt">
-	    	<form action="/loginCheck">
-	    		<input type="text" name="id"><br>
-	    		<input type="password" name="password"><br><hr>
-	    		<input type="submit" value="login">
-	    		<input type="button" href="/join" value="join">
+	    	<form action="/withcorona/loginCheck" method="post">
+	    		아이디: <input type="text" name="id"><br>
+	    		비밀번호: <input type="password" name="pwd"><br>
+	    		<input type="submit" value="로그인">
+	    		<input type="reset" value="다시입력"><br><br><br>
 	    	</form>
+	    	<a href="/withcorona/signUp">회원 가입</a>
     	</div>
     </section>
 </body>

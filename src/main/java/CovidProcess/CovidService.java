@@ -41,9 +41,29 @@ public class CovidService {
 		return covidDao.ForeignLocConfirmedCase(loc);
 	}
 	
+	//Controller의 signUpSuccess에서 쓰는 Service - 남모세
+	public void signUpSuccess(UserVO vo) {
+		covidDao.signUp(vo);
+	}
+		
+	//Controller의 signUpCheck에서 쓰는 Service - 남모세
+	public boolean signUpCheck(String id) {
+		UserVO vo = new UserVO();
+		vo = covidDao.signUpCheck(id);
+		System.out.println("Service => String id: " + id);
+		System.out.println("Service => getUserId: " + vo.getUserId());
+			
+		if(vo.getUserId() == null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
 	
-	public String loginCheck(String id, String pw) {
-		return covidDao.loginCheck(id, pw);
+	//Controller의 loginCheck에서 쓰는 Service - 남모세
+	public UserVO loginCheck(String id, int pwd) {
+		UserVO vo = covidDao.loginCheck(id, pwd);
+		return vo;
 	}
 	
 	public void qnaUpdate(BoardVO boardVO) {
