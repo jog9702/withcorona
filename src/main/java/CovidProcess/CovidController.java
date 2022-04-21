@@ -21,9 +21,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import vo.BoardVO;
-import vo.ClinicVO;
-import vo.UserVO;
+import vo.*;
 
 /**
  * Servlet implementation class potController
@@ -363,23 +361,22 @@ public class CovidController extends HttpServlet {
 				boardVo = covidService.qnaView(Integer.parseInt(boardId));
 				request.setAttribute("qna", boardVo);
 				
-				nextPage = "/board01/modifyArticle.jsp";
+				nextPage = "/qnaUpdate.jsp";
 				
 				// 게시판 수정
-			}else if(action.equals("/qnaUpdate2")){
+			}else if(action.equals("/qnaUpdateResult")){
 				BoardVO	boardVo = new BoardVO();
 				String boardId = request.getParameter("boardId");
 				String title = request.getParameter("title");
 				String desc = request.getParameter("desc");
 				
 				boardVo.setBoardId(Integer.parseInt(boardId));
-//				boardVo.setUserId(userId);
 				boardVo.setBoardTitle(title);
 				boardVo.setBoardDesc(desc);
 				
-				covidService.qnaUpdate2(boardVo);
+				covidService.qnaUpdate(boardVo);
 				
-				nextPage = "/qnaView?boardId=" + boardId;
+				nextPage = "/withcorona/qnaView?boardId=" + boardId;
 				
 				// 게시판 삭제
 			}else if(action.equals("/qnaDelete")){
@@ -387,7 +384,7 @@ public class CovidController extends HttpServlet {
 				String boardId = request.getParameter("boardId");
 				covidService.qnaDelete(Integer.parseInt(boardId));
 				
-				nextPage = "/qna.jsp";
+				nextPage = "/withcorona/qna";
 				
 			}else {	
 				nextPage = "/deny.jsp";

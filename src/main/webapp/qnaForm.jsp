@@ -8,6 +8,11 @@
 <head>
 <meta charset="UTF-8">
 <title>COVID-19</title>
+<script>
+	function goList(){
+		location.href="${ contextPath }/withcorona/qna";
+	}
+</script>
 <style>
     .fixed{
         position: fixed;
@@ -94,7 +99,7 @@
         <hr>
     </div>
     </header>
-    <setion>
+    <section>
 		<c:if test="${ vo.userAuth == null }">
     		<script>
     			alert("로그인을 해야합니다.");
@@ -110,7 +115,7 @@
 			<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
 			<br><br>
 			<input type="submit" value="글쓰기">
-			<input type="button" value="목록보기" onclick="/withcorona/qna.jsp">
+			<input type="button" value="목록보기" onclick="goList();">
 		</form>
     	</c:if>
 	</section>

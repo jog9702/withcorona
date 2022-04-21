@@ -1085,10 +1085,7 @@ public class CovidDao {
 			con = dataFactory.getConnection();
 			
 			String query = "delete from board_info";
-			query += " where board_id = ? where board_id in (";
-			query += " select board_id from board_info start with board_id = ?";
-			query += " connect by prior board_id = board_parentno";
-			query += ")";
+			query += " where board_id = ?";
 			
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, boardId);

@@ -97,13 +97,13 @@
     </header>
 	<section>
 		작성자 : ${ qna.userId }<br>
-		<form name="qnaForm" method="post" action="${ contextPath }/qnaUpdate2">
+		<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaUpdateResult">
 			제목 : <input name="title" type="text" value="${ qna.boardTitle }"><br> 
 			내용 : <br>
-			<textarea name="desc" rows="10" cols="65" maxlength="4000">${ qna.desc }</textarea>
+			<textarea name="desc" rows="10" cols="65" maxlength="4000">${ qna.boardDesc }</textarea>
 			<br><br>
 			<input type="hidden" name="boardId" value="${ qna.boardId }">
-			<input type="submit" value="등록하기">
+			<input type="submit" value="수정하기">
 			<input type="button" value="취소하기" onclick="history.back(-1)">
 		</form>
 	</section>

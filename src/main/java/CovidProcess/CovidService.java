@@ -146,10 +146,6 @@ public class CovidService {
 		covidDao.qnaUpdate(boardVO);
 	}
 	
-	public void qnaUpdate2(BoardVO boardVo) {
-		covidDao.qnaUpdate(boardVo);
-	}
-	
 	public void qnaDelete(int boardId) {
 		covidDao.qnaDelete(boardId);
 	}
