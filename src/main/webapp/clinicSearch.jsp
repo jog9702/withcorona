@@ -88,7 +88,7 @@
     </header>
     <section>
         <div class="mgt">
-        	<form action="http://localhost:8080/withcorona/selectClinic">
+        	<form action="http://localhost:8080/withcorona/selectClinic" method="post">
 				<input type="text" name="loc">
 				<input type="submit" value="조회" />
         	</form>
