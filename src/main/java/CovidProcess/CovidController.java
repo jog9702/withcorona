@@ -10,9 +10,9 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-//import org.json.simple.JSONArray;
-//import org.json.simple.JSONObject;
-//import org.json.simple.parser.JSONParser;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.ServletException;
@@ -119,59 +119,70 @@ public class CovidController extends HttpServlet {
 				request.setAttribute("to", "to");
 				
 				nextPage = "/covidForeign.jsp";
+				
+			}else if(action.equals("/updateToDate")){
+				
+				covidService.updateDBtoDate(request.getParameter("before"));
+				nextPage="/covidKorea.jsp";
+				
+			}else if(action.equals("/fUpdate")){
+				//해결
+				covidService.foreignUpdateDBtoDate(request.getParameter("before2"));
+				System.out.println("123");
+				nextPage="/covidForeign.jsp";
 
 			}else if (action.equals("/search")) {
 				//보건소 정보 검색하는 페이지로 이동 - 남모세
 				nextPage = "/clinicSearch.jsp";
 				
 			}else if(action.equals("/selectClinic")){
-//				//검색한 보건소 정보를 json에서 바로 표시해주는 페이지 - 남모세
-//				
-//				String loc = request.getParameter("loc");
-//				
-//				String url = "http://api.odcloud.kr/api/3072692/v1/uddi:9d420e87-8e70-4fb0-a54a-be1244249b2e_201909271427?page=1&perPage=3564&serviceKey=sI726jPqcVCuRbjGbsSgId%2BsznYVz20Kk7JJ0RJ7R09QQlrhYyYeeRWxOYXQqeWZXt2jQggrOrj5K2JytdxpsQ%3D%3D";
-//				String result = getStringFromURL(url);
-//				//lib에 json-simple.jar파일 넣어야함 - 남모세
-//				JSONParser jsonParser = new JSONParser();
-//				List<ClinicVO> list = new ArrayList();
-//
-//				try {
-//					Object obj = jsonParser.parse(result);
-//
-//					if(obj instanceof JSONObject) {
-//						JSONObject json = new JSONObject();
-//						json = (JSONObject) obj;
-//						
-//						JSONArray json_arr = (JSONArray) json.get("data");
-//						
-//						for(int i=0; i<json_arr.size(); i++) {
-//							JSONObject item = (JSONObject) json_arr.get(i);
-//							String local = (String) item.get("시도");
-//							String name = (String) item.get("보건기관명");
-//							String info = (String) item.get("주소");
-//							String tel = (String) item.get("대표전화번호");
-//							
-//							if(info.contains(loc)) {
-//								ClinicVO vo = new ClinicVO();
-//								
-//								vo.setClinicLocal(local);
-//								vo.setClinicName(name);
-//								vo.setClinicInfo(info);
-//								vo.setClinicTel(tel);
-//								list.add(vo);
-//							}
-//						}
-//						
-//					} else if(obj instanceof JSONArray) {
-//						
-//					}
-//					
-//				} catch(Exception e) {
-//					e.printStackTrace();
-//				}
-//				
-//				request.setAttribute("list", list);
-//				nextPage = "/clinicInfo.jsp";
+				//검색한 보건소 정보를 json에서 바로 표시해주는 페이지 - 남모세
+				
+				String loc = request.getParameter("loc");
+				
+				String url = "http://api.odcloud.kr/api/3072692/v1/uddi:9d420e87-8e70-4fb0-a54a-be1244249b2e_201909271427?page=1&perPage=3564&serviceKey=sI726jPqcVCuRbjGbsSgId%2BsznYVz20Kk7JJ0RJ7R09QQlrhYyYeeRWxOYXQqeWZXt2jQggrOrj5K2JytdxpsQ%3D%3D";
+				String result = getStringFromURL(url);
+				//lib에 json-simple.jar파일 넣어야함 - 남모세
+				JSONParser jsonParser = new JSONParser();
+				List<ClinicVO> list = new ArrayList();
+
+				try {
+					Object obj = jsonParser.parse(result);
+
+					if(obj instanceof JSONObject) {
+						JSONObject json = new JSONObject();
+						json = (JSONObject) obj;
+						
+						JSONArray json_arr = (JSONArray) json.get("data");
+						
+						for(int i=0; i<json_arr.size(); i++) {
+							JSONObject item = (JSONObject) json_arr.get(i);
+							String local = (String) item.get("시도");
+							String name = (String) item.get("보건기관명");
+							String info = (String) item.get("주소");
+							String tel = (String) item.get("대표전화번호");
+							
+							if(info.contains(loc)) {
+								ClinicVO vo = new ClinicVO();
+								
+								vo.setClinicLocal(local);
+								vo.setClinicName(name);
+								vo.setClinicInfo(info);
+								vo.setClinicTel(tel);
+								list.add(vo);
+							}
+						}
+						
+					} else if(obj instanceof JSONArray) {
+						
+					}
+					
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
+				
+				request.setAttribute("list", list);
+				nextPage = "/clinicInfo.jsp";
 //				
 			}else if(action.equals("/login")) {
 				//로그인 페이지로 이동 - 남모세
@@ -289,42 +300,79 @@ public class CovidController extends HttpServlet {
 				
 				
 				// 게시판 등록창이동
-			}else if(action.equals("/qnaForm.do")){
+			}else if(action.equals("/qnaForm")){
 				
-				nextPage = "/withcorona/qnaForm.jsp";
+				nextPage = "/qnaForm.jsp";
 				
 				// 게시판 등록
-//			}else if(action.equals("/qnaUpdate")){
-//				
-//				BoardVO	boardVo = new BoardVO();
-//				String title = request.getParameter("title");
-//				String desc = request.getParameter("desc");
-//				
-//				Integer id = (Integer) session.getAttribute("empno");
+			}else if(action.equals("/qnaInsert")){
+				
+				BoardVO	boardVo = new BoardVO();
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				
+				String userId = (String) session.getAttribute("user_id");
 //				if(id == null) id = 7839;
-//						
-//				boardVo = new BoardVO();
-//				boardVo.setBoardParentno(0);
-//				boardVo.setBoardId(id);
-//				boardVo.setBoardTitle(title);
-//				boardVo.setBoardDesc(desc);
-//				
-//				covidService.qnaUpdate(boardVo);
-//				
-//				nextPage = "/board/listArticles.do";
+						
+				boardVo = new BoardVO();
+				boardVo.setBoardParentno(0);
+				boardVo.setUserId(userId);
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
 				
+				covidService.qnaInsert(boardVo);
 				
+				nextPage = "/qna.jsp";
 				
-			}else if(action.equals("/updateToDate")){
+				// 게시판 상세 조회
+			}else if(action.equals("/qnaView")){
+				BoardVO	boardVo = new BoardVO();
+				String boardId = request.getParameter("boardId");
 				
-				covidService.updateDBtoDate(request.getParameter("before"));
-				nextPage="/covidKorea.jsp";
+				boardVo = covidService.qnaView(Integer.parseInt(boardId));
 				
-			}else if(action.equals("/fUpdate")){
-				//해결
-				covidService.foreignUpdateDBtoDate(request.getParameter("before2"));
-				System.out.println("123");
-				nextPage="/covidForeign.jsp";
+				// 텍스트 에어리어 줄넘김
+				String desc = boardVo.getBoardDesc();
+				if(desc != null && desc.length() > 0) {
+					desc = desc.replaceAll("\n", "<br>");
+					boardVo.setBoardDesc(desc);					
+				}
+				
+				request.setAttribute("article", boardVo);
+				nextPage = "/qnaView.jsp";
+				
+				// 게시판 수정페이지 이동
+			}else if(action.equals("/qnaUpdate")){
+				BoardVO	boardVo = new BoardVO();
+				String boardId = request.getParameter("boardId");
+				boardVo = covidService.qnaView(Integer.parseInt(boardId));
+				request.setAttribute("qna", boardVo);
+				
+				nextPage = "/board01/modifyArticle.jsp";
+				
+				// 게시판 수정
+			}else if(action.equals("/qnaUpdate2")){
+				BoardVO	boardVo = new BoardVO();
+				String boardId = request.getParameter("boardId");
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				
+				boardVo.setBoardId(Integer.parseInt(boardId));
+//				boardVo.setUserId(userId);
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
+				
+				covidService.qnaUpdate2(boardVo);
+				
+				nextPage = "/qnaView?boardId=" + boardId;
+				
+				// 게시판 삭제
+			}else if(action.equals("/qnaDelete")){
+				
+				String boardId = request.getParameter("boardId");
+				covidService.qnaDelete(Integer.parseInt(boardId));
+				
+				nextPage = "/qna.jsp";
 				
 			}else {	
 				nextPage = "/deny.jsp";

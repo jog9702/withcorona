@@ -999,39 +999,170 @@ public class CovidDao {
 		return qnaList;
 	}
 
+	// 게시판 모두 조회
+	public List<BoardVO> qnaSelect(int pageNum, int countPerPage){
+		List<BoardVO> qnaList = new ArrayList();
+		
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "";
+			query += "select * from (";
+			query += " select rownum as rnum, board_id, board_parentno, board_title, board_desc, board_time, u.user_id";
+			query += " from board_info b, user_info u";
+			query += " where b.user_id = u.user_id";
+			query += " start with board_parentno = 0";
+			query += " connect by prior board_id = board_parentno";
+			query += " order siblings by board_id desc";
+			query += " ) tmp";
+			query += " where rnum > ? and rnum <= ?";
+			
+			int offset = (pageNum - 1) * countPerPage;
+			int to = offset + countPerPage;
+			
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, to);
+			ResultSet rs = pstmt.executeQuery();
+			
+			while(rs.next()) {
+				BoardVO boardVo = new BoardVO();
+				boardVo.setBoardId(rs.getInt("board_id"));
+				boardVo.setBoardParentno(rs.getInt("board_parentno"));
+				boardVo.setBoardTitle(rs.getString("board_title"));
+				boardVo.setBoardDesc(rs.getString("board_desc"));
+				boardVo.setBoardTime(rs.getString("board_time"));
+				boardVo.setUserId(rs.getString("user_id"));
+				
+				qnaList.add(boardVo);
+			}
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return qnaList;
+	}
+	
 	// 게시판 입력, 등록
-	public void qnaUpdate(BoardVO boardVo) {
-
+	public void qnaInsert(BoardVO boardVo) {
+		
 		try {
 			con = dataFactory.getConnection();
 			String query = "";
-			query += "insert into board_info (board_id, board_title, board_desc, board_parentno)";
-			query += " values(board_info_seq.nextval, ?, ?, ?)";
+			query += "insert into board_info (board_id, user_id, board_parentno, board_title, board_desc, board_time)";
+			query += " values(board_info_seq.nextval, ?, ?, ?, ?, sysdate)";
 			pstmt = con.prepareStatement(query);
-
-			pstmt.setInt(1, boardVo.getBoardId());
-			pstmt.setString(2, boardVo.getBoardTitle());
-			pstmt.setString(3, boardVo.getBoardDesc());
-			pstmt.setInt(4, boardVo.getBoardParentno());
-
+			
+			pstmt.setString(1, boardVo.getUserId());
+			pstmt.setInt(2, boardVo.getBoardParentno());
+			pstmt.setString(3, boardVo.getBoardTitle());
+			pstmt.setString(4, boardVo.getBoardDesc());
+			
 			int result = pstmt.executeUpdate();
 			System.out.println("새글등록 : result : " + result);
-
+			
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
+	
+	// 게시판 상세조회
+	public BoardVO qnaView(int boardId) {
+		BoardVO boardVo = new BoardVO();
+		
+		try {
+			con = dataFactory.getConnection();
+			String query = "select b.*, u.user_id";
+			query += " from board_info b, user_info u";
+			query += " where b.board_id = ? and b.user_id = u.user_id";
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, boardId);
+			ResultSet rs = pstmt.executeQuery();
+			rs.next();
+			
+			boardVo.setBoardId(rs.getInt("board_id"));
+			boardVo.setUserId(rs.getString("user_id"));
+			boardVo.setBoardParentno(rs.getInt("board_parentno"));
+			boardVo.setBoardTitle(rs.getString("board_title"));
+			boardVo.setBoardDesc(rs.getString("board_desc"));
+			boardVo.setBoardTime(rs.getString("board_time"));	
+			
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return boardVo;
+	}
+	
+	// 게시판 수정
+	public void qnaUpdate(BoardVO boardVo) {
+		
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "update board_info set";
+			query += " board_title = ?, board_desc = ?";
+			query += " where board_id = ?";
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, boardVo.getBoardTitle());
+			pstmt.setString(2, boardVo.getBoardDesc());
+			pstmt.setInt(3, boardVo.getBoardId());
+			pstmt.executeUpdate();
+			
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 게시판 삭제
+	public void qnaDelete(int boardId) {
 
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "delete from board_info";
+			query += " where board_id = ? where board_id in (";
+			query += " select board_id from board_info start with board_id = ?";
+			query += " connect by prior board_id = board_parentno";
+			query += ")";
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, boardId);
+			pstmt.executeUpdate();
+			
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 게시판 글 전체 개수
 	public int qnaTotal() {
-
+		
 		int total = 0;
-
+		
 		try {
 			con = dataFactory.getConnection();
 			String query = "select count(*) as total from board_info";
 			pstmt = con.prepareStatement(query);
 			ResultSet rs = pstmt.executeQuery();
-			while (rs.next()) {
+			while(rs.next()) {
 				total = rs.getInt("total");
 			}
 		} catch (SQLException e) {
