@@ -1,5 +1,7 @@
 package vo;
 
+import java.sql.Date;
+
 public class BoardVO {
 	
 	// 게시판 정보
@@ -7,7 +9,7 @@ public class BoardVO {
 	private String userId;
 	private String boardTitle;
 	private String boardDesc;
-	private String boardTime;
+	private Date boardTime;
 	private int boardParentno;
 	
 	
@@ -35,10 +37,10 @@ public class BoardVO {
 	public void setBoardDesc(String boardDesc) {
 		this.boardDesc = boardDesc;
 	}
-	public String getBoardTime() {
+	public Date getBoardTime() {
 		return boardTime;
 	}
-	public void setBoardTime(String boardTime) {
+	public void setBoardTime(Date boardTime) {
 		this.boardTime = boardTime;
 	}
 	public int getBoardParentno() {

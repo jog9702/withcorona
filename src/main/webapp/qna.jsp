@@ -112,8 +112,8 @@
 							<td align="left" width="35%">
 								<span style="padding-right:30px"></span>
 								<c:choose>
-									<c:when test="${ qna.boardId > 1 }">
-										<c:forEach begin="1" end="${ qna.boardId }" step="1">
+									<c:when test="${ qna.boardParentno > 0 }">
+										<c:forEach begin="1" end="${ qna.boardParentno }" step="1">
 											<span style="padding-right:20px"></span>
 										</c:forEach>
 										<span style="font-size:12px">[답변]</span>
@@ -125,7 +125,7 @@
 								</c:choose>
 							</td>
 							<td width="10%">
-								<fmt:formatDate value="${ qna.boardTime }" pattern="yyyy-mm-dd hh:mm:ss"/>
+								<fmt:formatDate value="${ qna.boardTime }"/>
 							</td>
 						</tr>
 					</c:forEach>

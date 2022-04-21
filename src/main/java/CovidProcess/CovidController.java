@@ -347,7 +347,7 @@ public class CovidController extends HttpServlet {
 					boardVo.setBoardDesc(desc);					
 				}
 				
-				request.setAttribute("article", boardVo);
+				request.setAttribute("qna", boardVo);
 				nextPage = "/qnaView.jsp";
 				
 				// 게시판 수정페이지 이동

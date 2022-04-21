@@ -112,12 +112,12 @@ public class CovidService {
 	}
 	
 	public List<BoardVO> qnaList(int pageNum, int countPerPage){
-		List<BoardVO> articlesList = covidDao.selectQna(pageNum, countPerPage);
+		List<BoardVO> qnaList = covidDao.qnaSelect(pageNum, countPerPage);
 
 		// list는 그냥 모든 row
-		recursive(0, articlesList);
+		recursive(0, qnaList);
 
-		List list = articlesList;
+		List list = qnaList;
 		List resultList = new ArrayList();
 		
 		for(int i=0; i<list.size(); i++) {
@@ -129,7 +129,7 @@ public class CovidService {
 				
 			}
 		}
-		return articlesList;
+		return qnaList;
 	}
 	
 	public BoardVO qnaView(int boardId) {

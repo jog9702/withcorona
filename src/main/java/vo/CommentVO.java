@@ -1,5 +1,7 @@
 package vo;
 
+import java.sql.Date;
+
 public class CommentVO {
 	
 	// 댓글 정보
@@ -8,7 +10,7 @@ public class CommentVO {
 	private String userId;
 	private String comment;
 	private String commentDesc;
-	private String commentTime;
+	private Date commentTime;
 	private int commentParentno;
 	
 	
@@ -42,10 +44,10 @@ public class CommentVO {
 	public void setCommentDesc(String commentDesc) {
 		this.commentDesc = commentDesc;
 	}
-	public String getCommentTime() {
+	public Date getCommentTime() {
 		return commentTime;
 	}
-	public void setCommentTime(String commentTime) {
+	public void setCommentTime(Date commentTime) {
 		this.commentTime = commentTime;
 	}
 	public int getCommentParentno() {
