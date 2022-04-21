@@ -141,10 +141,12 @@
 
         </div>
         
-        <form action="/withcorona/updateToDate">
-        	<input type="text" name="before" value="yyyymmdd">
-        	<input type="submit" value="업데이트">
-        </form>
+        <c:if test="${ vo.userAuth eq '1' }">
+	        <form action="/withcorona/updateToDate">
+	        	<input type="text" name="before" value="yyyymmdd">
+	        	<input type="submit" value="업데이트">
+	        </form>
+        </c:if>
     </section>
 </body>
 </html>
