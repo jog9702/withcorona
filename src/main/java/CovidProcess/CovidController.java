@@ -23,6 +23,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import vo.BoardVO;
 import vo.ClinicVO;
+import vo.UserVO;
 
 /**
  * Servlet implementation class potController
@@ -173,18 +174,90 @@ public class CovidController extends HttpServlet {
 //				nextPage = "/clinicInfo.jsp";
 //				
 			}else if(action.equals("/login")) {
-				
+				//로그인 페이지로 이동 - 남모세
 				nextPage="/login.jsp";
 				
+			}else if(action.equals("/logout")) {
+				//로그아웃 하기 - 남모세
+				session.invalidate();
+				
+				nextPage="/homepage.jsp";
+				
 			}else if(action.equals("/loginCheck")) {
+				//로그인 시 가입된 id인지 확인 하는 Controller - 남모세
+				//integer.parseInt 때문에 NumberFormatException 날까봐 try catch로 묶음 - 남모세
+				try {
+					
+					String id = request.getParameter("id");
+					int pwd = Integer.parseInt(request.getParameter("pwd"));
+					System.out.println("Controller String id: " + id);
+					
+					UserVO vo = new UserVO();
+					vo = covidService.loginCheck(id, pwd);
+					if(vo.getUserAuth() != null) {
+						request.setAttribute("msg", "로그인 성공");
+//						request.getSession().setAttribute("userId", vo.getUserId());
+//						request.getSession().setAttribute("userPassword", vo.getUserPassword());
+//						request.getSession().setAttribute("userName", vo.getUserName());
+//						request.getSession().setAttribute("userGender", vo.getUserGender());
+//						request.getSession().setAttribute("userEmail", vo.getUserEmail());
+//						request.getSession().setAttribute("userAuth", vo.getUserAuth());
+						request.getSession().setAttribute("vo", vo);
+						
+					} else {
+						request.setAttribute("msg", "로그인 실패");
+					}
+					
+					nextPage="/loginResult.jsp";
 				
-				String auth = covidService.loginCheck((String)request.getParameter("id"), (String)request.getParameter("password"));
+				} catch(Exception e) {
+					e.printStackTrace();
+				}
 				
-				if(auth == null) {
-					nextPage="/login.jsp";
-				}else {
-					session.setAttribute("auth", auth);
-					nextPage="/qna.jsp";
+			}else if(action.equals("/signUp")) {
+				//회원가입 페이지로 이동 - 남모세
+				
+				nextPage="/signUp.jsp";
+
+			}else if(action.equals("/signUpResult")) {
+				//회원가입 페이지에서 입력한 값들은 받아서 UserVO에 넣는 Controller - 남모세
+
+				//integer.parseInt 때문에 NumberFormatException 날까봐 try catch로 묶음 - 남모세
+				String id = request.getParameter("id");
+				System.out.println("con => id: " + id);
+				if(covidService.signUpCheck(id)) {
+					
+					try {
+						id = request.getParameter("id");
+						int pwd = Integer.parseInt(request.getParameter("pwd"));
+						String name = request.getParameter("name");
+						String gender = request.getParameter("gender");
+						String email = request.getParameter("email");
+						String auth = "0";
+						
+						UserVO vo = new UserVO();
+						vo.setUserId(id);
+						vo.setUserPassword(pwd);
+						vo.setUserName(name);
+						vo.setUserGender(gender);
+						vo.setUserEmail(email);
+						vo.setUserAuth(auth);
+						
+						covidService.signUpSuccess(vo);
+						
+						request.setAttribute("signUpMsg", "회원가입 성공");
+
+						nextPage="/signUpResult.jsp";
+
+					} catch(Exception e) {
+						e.printStackTrace();
+					}
+					
+				} else {
+					request.setAttribute("signUpMsg", "회원가입 실패");
+
+					nextPage="/signUpResult.jsp";
+
 				}
 			
 				// 게시판 조회

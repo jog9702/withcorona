@@ -66,8 +66,9 @@
 	.mgt-30{
 		margin-top: 30px;
 	}
-
-
+	.login{
+		float: right;
+	}
 
 </style>
 </head>
@@ -76,6 +77,14 @@
     <div class="fixed">
         <div class="fs">
             <a href="/withcorona/covidHomepage">COVID-19</a>
+        </div>
+        <div class="login">
+        	<c:if test="${ vo.userAuth == null }">
+				<a href="/withcorona/login"><input type="button" value="로그인"></a>
+			</c:if>
+        	<c:if test="${ vo.userAuth != null }">
+				<a href="/withcorona/logout"><input type="button" value="로그아웃"></a>
+			</c:if>
         </div>
         <div class="flex">
             <div><a href="/withcorona/covidKorea">국내 상세</a></div>
@@ -88,7 +97,7 @@
     </header>
     <section>
         <div class="mgt">
-        	<form action="http://localhost:8080/withcorona/selectClinic">
+        	<form action="http://localhost:8080/withcorona/selectClinic" method="post">
 				<input type="text" name="loc">
 				<input type="submit" value="조회" />
         	</form>

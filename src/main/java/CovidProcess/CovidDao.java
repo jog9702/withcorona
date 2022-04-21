@@ -865,25 +865,36 @@ public class CovidDao {
 		return count;
 	}
 
-	public String loginCheck(String id, String pw) {
+	// 로그인 시 id pwd 확인 - 남모세
+	public UserVO loginCheck(String id, int pwd) {
 
-		String authcode = "";
+		UserVO vo = new UserVO();
 
 		try {
 			con = dataFactory.getConnection();
-
+			
 			String query = "";
-			query += "SELECT user_id, user_password ";
-			query += " from user";
+			query += " SELECT * ";
+			query += " FROM user_info ";
+			query += " WHERE user_id = ? ";
+			query += " AND user_password = ? ";
 
 			pstmt = con.prepareStatement(query);
+
+			pstmt.setString(1, id);
+			pstmt.setInt(2, pwd);
 
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
-				if (id.equals(rs.getString("user_id")) && pw.equals(rs.getString("user_password"))) {
-					authcode = rs.getString("user_auth");
-				}
+
+				vo.setUserId(rs.getString("user_id"));
+				vo.setUserPassword(rs.getInt("user_password"));
+				vo.setUserName(rs.getString("user_name"));
+				vo.setUserGender(rs.getString("user_gender"));
+				vo.setUserEmail(rs.getString("user_email"));
+				vo.setUserAuth(rs.getString("user_auth"));
+
 			}
 			if (rs != null) {
 				rs.close();
@@ -896,11 +907,10 @@ public class CovidDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		return authcode;
+		return vo;
 	}
 
 	public String getStringFromURL(String url) {
@@ -1028,6 +1038,137 @@ public class CovidDao {
 			e.printStackTrace();
 		}
 		return total;
+	}
+	
+	// 회원가입 시 DB에 회원정보 넣는 메소드 - 남모세(Service의 signUpSuccess에서 호출함)
+	public void signUp(UserVO vo) {
+
+		try {
+			con = dataFactory.getConnection();
+
+			String query = " INSERT INTO user_info (user_id, user_password, user_name, user_gender, user_email, user_auth)";
+			query += " VALUES (?, ?, ?, ?, ?, ?)";
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, vo.getUserId());
+			pstmt.setInt(2, vo.getUserPassword());
+			pstmt.setString(3, vo.getUserName());
+			pstmt.setString(4, vo.getUserGender());
+			pstmt.setString(5, vo.getUserEmail());
+			pstmt.setString(6, vo.getUserAuth());
+
+			int result = pstmt.executeUpdate();
+			System.out.println("signUp 성공: " + result);
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		} finally {
+			try {
+
+				if (con != null)
+					con.close();
+				if (pstmt != null)
+					pstmt.close();
+
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+
+		}
+
+	}
+
+	// 회원가입 시 중복되는 id가 있는지 확인 - 남모세
+	public UserVO signUpCheck(String id) {
+
+		System.out.println("Dao => String id: " + id);
+		UserVO vo = new UserVO();
+
+		try {
+			con = dataFactory.getConnection();
+
+			String query = "";
+			query += " SELECT user_id ";
+			query += " FROM user_info ";
+			query += " WHERE user_id = ? ";
+			System.out.println(query);
+
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, id);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+
+				String userId = rs.getString("user_id");
+
+				vo.setUserId(userId);
+				System.out.println("Dao => vo.getUserId: " + vo.getUserId());
+			}
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (con != null) {
+				con.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vo;
+	}
+
+	public UserVO loginCheck(String id) {
+		// Service에서 호출하는 loginCheck메소드 - 남모세
+		UserVO vo = new UserVO();
+
+		try {
+			con = dataFactory.getConnection();
+
+			String query = "";
+			query += " SELECT * ";
+			query += " FROM user_info ";
+			query += " WHERE user_id = ? ";
+			System.out.println(query);
+
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, id);
+
+			ResultSet rs = pstmt.executeQuery();
+			while (rs.next()) {
+
+				String userId = rs.getString("user_id");
+				int userPassword = rs.getInt("user_password");
+				String userName = rs.getString("user_name");
+				String userGender = rs.getString("user_gender");
+				String userEmail = rs.getString("user_email");
+				String userAuth = rs.getString("user_auth");
+
+				vo.setUserId(userId);
+				vo.setUserPassword(userPassword);
+				vo.setUserName(userName);
+				vo.setUserGender(userGender);
+				vo.setUserEmail(userEmail);
+				vo.setUserAuth(userAuth);
+
+			}
+			if (rs != null) {
+				rs.close();
+			}
+			if (pstmt != null) {
+				pstmt.close();
+			}
+			if (con != null) {
+				con.close();
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return vo;
 	}
 
 }
