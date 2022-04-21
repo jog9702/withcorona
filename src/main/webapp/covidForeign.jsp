@@ -69,8 +69,9 @@
     .fs--{
     	font-size: 15px;
     }
-
-
+	.login{
+		float: right;
+	}
 
 </style>
 </head>

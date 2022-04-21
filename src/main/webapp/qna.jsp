@@ -69,6 +69,9 @@
 	table{
 		margin-top: 240px;
 	}
+	.login{
+		float: right;
+	}
 
 </style>
 </head>

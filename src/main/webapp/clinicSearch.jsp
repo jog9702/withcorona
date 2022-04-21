@@ -66,8 +66,9 @@
 	.mgt-30{
 		margin-top: 30px;
 	}
-
-
+	.login{
+		float: right;
+	}
 
 </style>
 </head>

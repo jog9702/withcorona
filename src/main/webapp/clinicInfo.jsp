@@ -74,6 +74,9 @@
 	th, td{
 		border: 1px solid;
 	}
+	.login{
+		float: right;
+	}
 
 </style>
 </head>

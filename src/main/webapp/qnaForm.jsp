@@ -62,6 +62,9 @@
 		width:800px;
 		text-align: right;
 	}
+	.login{
+		float: right;
+	}
 
 </style>
 </head>
