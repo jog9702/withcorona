@@ -215,7 +215,7 @@ public class CovidController extends HttpServlet {
 					vo = covidService.loginCheck(id, pwd);
 					if(vo.getUserAuth() != null) {
 						request.setAttribute("msg", "로그인 성공");
-//						request.getSession().setAttribute("userId", vo.getUserId());
+						request.getSession().setAttribute("userId", vo.getUserId());
 //						request.getSession().setAttribute("userPassword", vo.getUserPassword());
 //						request.getSession().setAttribute("userName", vo.getUserName());
 //						request.getSession().setAttribute("userGender", vo.getUserGender());
@@ -318,12 +318,13 @@ public class CovidController extends HttpServlet {
 			}else if(action.equals("/qnaInsert")){
 				
 				BoardVO	boardVo = new BoardVO();
+				UserVO userVo = new UserVO();
+				
 				String title = request.getParameter("title");
 				String desc = request.getParameter("desc");
 				
-				String userId = (String) session.getAttribute("user_id");
-//				if(id == null) id = 7839;
-						
+				String userId = (String) session.getAttribute("userId");		
+				
 				boardVo = new BoardVO();
 				boardVo.setBoardParentno(0);
 				boardVo.setUserId(userId);
@@ -332,8 +333,9 @@ public class CovidController extends HttpServlet {
 				
 				covidService.qnaInsert(boardVo);
 				
-				nextPage = "/qna.jsp";
-				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qna");					
+	
 				// 게시판 상세 조회
 			}else if(action.equals("/qnaView")){
 				BoardVO	boardVo = new BoardVO();
@@ -376,7 +378,8 @@ public class CovidController extends HttpServlet {
 				
 				covidService.qnaUpdate(boardVo);
 				
-				nextPage = "/withcorona/qnaView?boardId=" + boardId;
+				nextPage = "";
+				response.sendRedirect("/withcorona/qnaView?boardId=" + boardId);
 				
 				// 게시판 삭제
 			}else if(action.equals("/qnaDelete")){
@@ -384,14 +387,18 @@ public class CovidController extends HttpServlet {
 				String boardId = request.getParameter("boardId");
 				covidService.qnaDelete(Integer.parseInt(boardId));
 				
-				nextPage = "/withcorona/qna";
+				nextPage = "";
+				response.sendRedirect("/withcorona/qna");
 				
 			}else {	
 				nextPage = "/deny.jsp";
 			}
 			
-			RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
-			dispatch.forward(request, response);
+			if(!nextPage.equals("")) {
+				RequestDispatcher dispatch = request.getRequestDispatcher(nextPage);
+				dispatch.forward(request, response);				
+			}
+			
 			
 		}catch (Exception e) {
 			e.printStackTrace();
