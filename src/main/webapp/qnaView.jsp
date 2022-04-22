@@ -27,7 +27,7 @@
 	}
 	
 	function goComment(){
-		location.href="${ contextPath }/withcorona/qnaForm?boardParentNO=${qna.boardId}";
+		location.href="${ contextPath }/withcorona/qnaComment?boardParentNO=${qna.boardId}";
 	}
 </script>
 <style>
@@ -119,28 +119,6 @@
     </div>
     </header>
     <section>
-<<<<<<< HEAD
-		작성자 : ${ qna.userId }<br>
-		제목 : ${ qna.boardTitle }<br> 
-		내용 : <br>
-		<div style="border:1px black solid; padding:10px;">
-		${ qna.boardDesc }
-		</div>
-		<br><br>
-		<div>
-        	<c:if test="${ qna.userId eq vo.userId || vo.userAuth eq '1'}">
-        		<input type="button" value="수정하기" onclick="goUpdate();">
-				<input type="button" value="삭제하기" onclick="goDelete();">
-				<input type="button" value="답글쓰기" onclick="goComment();">
-				<input type="button" value="목록보기" onclick="goList();">
-			</c:if>
-        	<c:if test="${ !(qna.userId eq vo.userId) && vo.userAuth eq '0'}">
-				<input type="button" value="답글쓰기" onclick="goComment();">
-				<input type="button" value="목록보기" onclick="goList();">
-			</c:if>
-        </div>
-        
-=======
     	<div class="qnaView">
 	    	<c:if test="${ vo.userAuth == null}">
 	    		로그인이 필요한 페이지입니다.<br>
@@ -168,7 +146,6 @@
 		        </div>
 	    	</c:if>
     	</div>
->>>>>>> a6c59ab1c7043e08b8b46d762355ced9313f57b9
     </section>
 </body>
 </html>
