@@ -726,7 +726,7 @@ public class CovidDao {
 			
 			if(token == null) {
 				count = 0;
-			}else{
+			}else {
 				int tmpDate = (Integer.parseInt(token.substring(8, 10)));
 				System.out.println(Integer.parseInt(token.substring(8, 10)));
 				System.out.println(tmpDate);
