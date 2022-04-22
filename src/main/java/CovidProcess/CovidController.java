@@ -21,6 +21,7 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import vo.*;
 
 /**
@@ -324,7 +325,6 @@ public class CovidController extends HttpServlet {
 				
 				String title = request.getParameter("title");
 				String desc = request.getParameter("desc");
-				
 				String userId = (String) session.getAttribute("userId");		
 				
 				boardVo = new BoardVO();
@@ -388,6 +388,33 @@ public class CovidController extends HttpServlet {
 				
 				String boardId = request.getParameter("boardId");
 				covidService.qnaDelete(Integer.parseInt(boardId));
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qna");
+				
+				// 게시판 답글 페이지 이동
+			}else if(action.equals("/qnaReply")){
+				
+				String boardParentno = request.getParameter("boardParentno");
+				request.setAttribute("boardParentno", boardParentno);
+				
+				nextPage = "/qnaReply.jsp";	
+				
+				// 게시판 답글 
+			}else if(action.equals("/qnaReplyResult")){
+				
+				String boardParentno = request.getParameter("boardParentno");
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				String userId = (String) session.getAttribute("userId");	
+				
+				BoardVO boardVo = new BoardVO();
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
+				boardVo.setUserId(userId);
+				boardVo.setBoardParentno(Integer.parseInt(boardParentno));
+				
+				covidService.addReply(boardVo);
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");

@@ -154,4 +154,9 @@ public class CovidService {
 		return covidDao.qnaTotal();
 	}
 	
+	public void addReply(BoardVO boardVO) {
+		covidDao.qnaInsert(boardVO);
+	}
+	
+	
 }

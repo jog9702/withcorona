@@ -9,25 +9,9 @@
 <head>
 <meta charset="UTF-8">
 <title>COVID-19</title>
-<script src="https://code.jquery.com/jquery-3.6.0.js"></script>
 <script>
 	function goList(){
-		location.href="${ contextPath }/withcorona/qna";
-	}
-	
-	function goUpdate(){
-		location.href="${ contextPath }/withcorona/qnaUpdate?boardId=${qna.boardId}";
-	}
-	
-	function goDelete(){
-		var isDel = window.confirm("정말 삭제하시겠습니까?");
-		if(isDel){
-			location.href="${ contextPath }/withcorona/qnaDelete?boardId=${qna.boardId}";
-		}
-	}
-	
-	function goReply(){
-		location.href="${ contextPath }/withcorona/qnaReply?boardParentno=${qna.boardId}";
+		location.href="${ contextPath }/withcorona/qnaView?boardId=${qna.boardId}";
 	}
 </script>
 <style>
@@ -87,10 +71,13 @@
 		width:800px;
 		text-align: right;
 	}
+	table{
+		margin-top: 240px;
+	}
 	.login{
 		float: right;
 	}
-	
+
 </style>
 </head>
 <body>
@@ -117,25 +104,15 @@
     </div>
     </header>
     <section>
-		작성자 : ${ qna.userId }<br>
-		제목 : ${ qna.boardTitle }<br> 
+    	<h1>답글 쓰기</h1>
+    	<form name="articleForm" method="post" action="${contextPath}/withcorona/qnaReplyResult">
+		제목 : <input type="text" name="title"><br>
 		내용 : <br>
-		<div style="border:1px black solid; padding:10px;">
-		${ qna.boardDesc }
-		</div>
+		<textarea name="content" rows=10 cols=65 maxlength="4000"></textarea>
 		<br><br>
-		<div>
-        	<c:if test="${ qna.userId eq vo.userId || vo.userAuth eq '1'}">
-        		<input type="button" value="수정하기" onclick="goUpdate();">
-				<input type="button" value="삭제하기" onclick="goDelete();">
-				<input type="button" value="답글쓰기" onclick="goReply();">
-				<input type="button" value="목록보기" onclick="goList();">
-			</c:if>
-        	<c:if test="${ !(qna.userId eq vo.userId) && vo.userAuth eq '0'}">
-				<input type="button" value="답글쓰기" onclick="goReply();">
-				<input type="button" value="목록보기" onclick="goList();">
-			</c:if>
-        </div>
+		<input type="hidden" name="boardParentno" value="${boardParentno}">
+		<input type="submit" value="글쓰기">
+		<input type="button" value="목록보기" onclick="goList();">
     </section>
 </body>
 </html>
