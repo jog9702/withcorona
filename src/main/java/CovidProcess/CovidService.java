@@ -125,7 +125,7 @@ public class CovidService {
 			
 			if(boardVo.getBoardParentno() == 0) {
 				resultList.add(boardVo);
-				int articleNo = boardVo.getBoardId();
+				int boardId = boardVo.getBoardId();
 				
 			}
 		}
@@ -138,12 +138,12 @@ public class CovidService {
 		return boardVo;
 	}
 	
-	public void qnaInsert(BoardVO boardVO) {
-		covidDao.qnaInsert(boardVO);
+	public void qnaInsert(BoardVO boardVo) {
+		covidDao.qnaInsert(boardVo);
 	}
 	
-	public void qnaUpdate(BoardVO boardVO) {
-		covidDao.qnaUpdate(boardVO);
+	public void qnaUpdate(BoardVO boardVo) {
+		covidDao.qnaUpdate(boardVo);
 	}
 	
 	public void qnaDelete(int boardId) {
@@ -154,9 +154,38 @@ public class CovidService {
 		return covidDao.qnaTotal();
 	}
 	
-	public void addReply(BoardVO boardVO) {
-		covidDao.qnaInsert(boardVO);
+	public void qnaReply(BoardVO boardVo) {
+		covidDao.qnaInsert(boardVo);
 	}
 	
+	public List<CommentVO> commentList(int boardId){
+		
+		List<CommentVO> commentList = covidDao.commentSelect(boardId);
+
+		// list는 그냥 모든 row
+		recursive(0, commentList);
+
+		List list = commentList;
+		List resultList = new ArrayList();
+		
+		for(int i=0; i<list.size(); i++) {
+			CommentVO commentVo = (CommentVO) list.get(i);
+			
+			if(commentVo.getCommentParentno() == 0) {
+				resultList.add(commentVo);
+				int articleNo = commentVo.getBoardId();
+				
+			}
+		}
+		return commentList;
+	}
+	
+	public void commentInsert(CommentVO commentVO) {
+		covidDao.commentInsert(commentVO);
+	}
+	
+	public void commentReply(CommentVO commentVO) {
+		covidDao.commentInsert(commentVO);
+	}
 	
 }

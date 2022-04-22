@@ -1072,7 +1072,7 @@ public class CovidDao {
 			
 			String query = "";
 			query += "select * from (";
-			query += " select rownum as rnum, board_id, board_parentno, board_title, board_desc, board_time, u.user_id";
+			query += " select rownum as rnum, level, board_id, board_parentno, board_title, board_desc, board_time, u.user_id";
 			query += " from board_info b, user_info u";
 			query += " where b.user_id = u.user_id";
 			query += " start with board_parentno = 0";
@@ -1084,7 +1084,8 @@ public class CovidDao {
 			int offset = (pageNum - 1) * countPerPage;
 			int to = offset + countPerPage;
 			
-			
+			System.out.println(offset);
+			System.out.println(to);
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, offset);
 			pstmt.setInt(2, to);
@@ -1093,12 +1094,15 @@ public class CovidDao {
 			
 			while(rs.next()) {
 				BoardVO boardVo = new BoardVO();
+				boardVo.setLevel(rs.getInt("level"));
 				boardVo.setBoardId(rs.getInt("board_id"));
 				boardVo.setBoardParentno(rs.getInt("board_parentno"));
 				boardVo.setBoardTitle(rs.getString("board_title"));
 				boardVo.setBoardDesc(rs.getString("board_desc"));
 				boardVo.setBoardTime(rs.getDate("board_time"));
 				boardVo.setUserId(rs.getString("user_id"));
+				
+				System.out.println("level : " + boardVo.getLevel());
 				
 				qnaList.add(boardVo);
 			}
@@ -1239,6 +1243,130 @@ public class CovidDao {
 		}
 		return total;
 	}
+	
+	
+	// 댓글 조회
+	public List<CommentVO> commentSelect(int boardId){
+		List<CommentVO> commentList = new ArrayList();
+		BoardVO boardVo = new BoardVO();
+		CommentVO commentVo = new CommentVO();
+		
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "";
+			query += "select * from (";
+			query += " select comment_id, comment_parentno, comment_desc, comment_time, b.board_id";
+			query += " from comment_info c, board_info b";
+			query += " where b.board_id = ? and c.board_id = b.board_id";
+			query += " start with comment_parentno = 0";
+			query += " connect by prior comment_id = comment_parentno";
+			query += " order siblings by comment_id desc";
+			query += " ) tmp";
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, boardVo.getBoardId());
+			ResultSet rs = pstmt.executeQuery();
+			System.out.println(query);
+			
+			while(rs.next()) {
+				commentVo.setCommentId(rs.getInt("comment_id"));
+				commentVo.setBoardId(rs.getInt("board_id"));
+				commentVo.setCommentParentno(rs.getInt("comment_parentno"));
+				commentVo.setCommentDesc(rs.getString("comment_desc"));
+				commentVo.setCommentTime(rs.getDate("comment_time"));
+				commentVo.setUserId(rs.getString("user_id*"));
+				
+				commentList.add(commentVo);
+			}
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return commentList;
+	}
+	
+	// 댓글 입력, 등록
+	public void commentInsert(CommentVO commentVo) {
+		
+		try {
+			con = dataFactory.getConnection();
+			String query = "";
+			query += "insert into comment_info (comment_id, board_id, user_id, comment_parentno, comment_desc, comment_time)";
+			query += " values(comment_info_seq.nextval, ?, ?, ?, ?, sysdate)";
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setInt(1, commentVo.getBoardId());
+			pstmt.setString(2, commentVo.getUserId());
+			pstmt.setInt(3, commentVo.getCommentParentno());
+			pstmt.setString(4, commentVo.getCommentDesc());
+			
+			int result = pstmt.executeUpdate();
+			System.out.println("새댓글등록 : result : " + result);
+			
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 댓글 수정
+	public void commentUpdate(CommentVO commentVo) {
+		
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "update comment_info set";
+			query += " comment_desc = ?";
+			query += " where comment_id = ?";
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setString(1, commentVo.getCommentDesc());
+			pstmt.setInt(2, commentVo.getCommentId());
+			pstmt.executeUpdate();
+			
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 댓글 삭제
+	public void commentDelete(int commentId) {
+
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "delete from comment_info";
+			query += " where board_id = ?";
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, commentId);
+			pstmt.executeUpdate();
+			
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	// 회원가입 시 DB에 회원정보 넣는 메소드 - 남모세(Service의 signUpSuccess에서 호출함)
 	public void signUp(UserVO vo) {

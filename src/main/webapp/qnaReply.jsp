@@ -108,7 +108,7 @@
     	<form name="articleForm" method="post" action="${contextPath}/withcorona/qnaReplyResult">
 		제목 : <input type="text" name="title"><br>
 		내용 : <br>
-		<textarea name="content" rows=10 cols=65 maxlength="4000"></textarea>
+		<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
 		<br><br>
 		<input type="hidden" name="boardParentno" value="${boardParentno}">
 		<input type="submit" value="글쓰기">

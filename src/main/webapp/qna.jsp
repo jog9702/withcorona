@@ -119,13 +119,13 @@
 					<c:forEach var="qna" items="${ qnaList }" varStatus="qnaNum">
 						<tr align="center">
 							<td width="5%">${ qnaNum.count }</td>
-							<td width="10%">${ qna.userId }</td>
-							<td align="left" width="35%">
+							<td width="10%">${ qna.userId }, ${ qna.level }</td>
+							<td align="left" width="35%" class="level_${ qna.level }">
 								<span style="padding-right:30px"></span>
 								<c:choose>
-									<c:when test="${ qna.boardParentno > 0 }">
-										<c:forEach begin="1" end="${ qna.boardParentno }" step="1">
-											<span style="padding-right:20px"></span>
+									<c:when test="${ qna.level > 1 }">
+										<c:forEach begin="1" end="${ qna.level }" step="1">
+											<span style="padding-right:10px"></span>
 										</c:forEach>
 										<span style="font-size:12px">[답변]</span>
 										<a href="${ contextPath }/withcorona/qnaView?boardId=${ qna.boardId }">${ qna.boardTitle }</a>

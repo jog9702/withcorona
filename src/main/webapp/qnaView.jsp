@@ -136,6 +136,58 @@
 				<input type="button" value="목록보기" onclick="goList();">
 			</c:if>
         </div>
+        <br><br>
+    </section>
+        	<table>
+			<thred>
+				<tr>
+					<td>작성자</td>
+					<td>댓글내용</td>
+					<td>작성일</td>
+				</tr>
+			</thred>
+			<tbody>
+			<c:choose>
+				<c:when test="${ empty commentList }">
+					<tr height="10">
+						<td colspan="5">등록된 댓글이 없습니다</td>
+					</tr>
+				</c:when>
+				<c:when test="${! empty commentList }">
+					<c:forEach var="comment" items="${ commentList }" varStatus="qnaNum">
+						<tr align="center">
+							<td width="10%">${ comment.userId }</td>
+							<td align="left" width="35%">
+								<span style="padding-right:30px"></span>
+								<c:choose>
+									<c:when test="${ comment.commentParentno > 0 }">
+										<c:forEach begin="1" end="${ comment.commentParentno }" step="1">
+											<span style="padding-right:20px"></span>
+										</c:forEach>
+										<span style="font-size:12px">[답변]</span>
+										<div>${ comment.commentDesc }</div>
+									</c:when>
+									<c:otherwise>
+										<div>${ comment.commentDesc }</div>
+									</c:otherwise>
+								</c:choose>
+							</td>
+							<td width="10%">
+								<fmt:formatDate value="${ comment.commentTime }"/>
+							</td>
+						</tr>
+					</c:forEach>
+				</c:when>
+			</c:choose>
+		</tbody>
+    	</table>
+    <section>
+    	<form name="qnaForm" method="post" action="${ contextPath }/withcorona/commentInsert">
+			댓글작성 <br>
+			<textarea name="commentDesc" rows=5 cols=60 maxlength="4000" required></textarea>
+			<br><br>
+			<input type="submit" value="댓글쓰기">
+		</form>
     </section>
 </body>
 </html>

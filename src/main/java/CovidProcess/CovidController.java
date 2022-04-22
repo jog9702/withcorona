@@ -332,6 +332,7 @@ public class CovidController extends HttpServlet {
 				// 게시판 상세 조회
 			}else if(action.equals("/qnaView")){
 				BoardVO	boardVo = new BoardVO();
+				CommentVO commentVo = new CommentVO();
 				String boardId = request.getParameter("boardId");
 				
 				boardVo = covidService.qnaView(Integer.parseInt(boardId));
@@ -343,7 +344,14 @@ public class CovidController extends HttpServlet {
 					boardVo.setBoardDesc(desc);					
 				}
 				
+				List<CommentVO> commenetList = new ArrayList<CommentVO>();
+				
+				commenetList = covidService.commentList(Integer.parseInt(boardId));
+				
+				request.setAttribute("commenetList", commenetList);
+				
 				request.setAttribute("qna", boardVo);
+				request.setAttribute("comment", commentVo);
 				
 				session.setAttribute("action", action);
 				
@@ -405,10 +413,84 @@ public class CovidController extends HttpServlet {
 				boardVo.setUserId(userId);
 				boardVo.setBoardParentno(Integer.parseInt(boardParentno));
 				
-				covidService.addReply(boardVo);
+				covidService.qnaReply(boardVo);
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");
+				
+
+				
+				
+				
+				
+				// 댓글 등록
+			}else if(action.equals("/commentInsert")){
+				
+				CommentVO commentVo = new CommentVO();
+				UserVO userVo = new UserVO();
+				
+				String boardId = request.getParameter("boardId");
+				String commentDesc = request.getParameter("commentDesc");
+				String userId = (String) session.getAttribute("userId");		
+				
+				commentVo.setCommentParentno(0);
+				commentVo.setBoardId(Integer.parseInt(boardId));
+				commentVo.setCommentDesc(commentDesc);
+				commentVo.setUserId(userId);
+				
+				covidService.commentInsert(commentVo);
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qnaView?boardId=" + boardId);			
+				
+				// 댓글 수정
+			}else if(action.equals("/qnaUpdateResult")){
+				BoardVO	boardVo = new BoardVO();
+				String boardId = request.getParameter("boardId");
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				
+				boardVo.setBoardId(Integer.parseInt(boardId));
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
+				
+				covidService.qnaUpdate(boardVo);
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qnaView?boardId=" + boardId);
+				
+				// 댓글 삭제
+			}else if(action.equals("/qnaDelete")){
+				
+				String boardId = request.getParameter("boardId");
+				covidService.qnaDelete(Integer.parseInt(boardId));
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qna");
+				
+				// 댓글 답글 
+			}else if(action.equals("/qnaReplyResult")){
+				
+				String boardParentno = request.getParameter("boardParentno");
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				String userId = (String) session.getAttribute("userId");	
+				
+				BoardVO boardVo = new BoardVO();
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
+				boardVo.setUserId(userId);
+				boardVo.setBoardParentno(Integer.parseInt(boardParentno));
+				
+				covidService.qnaReply(boardVo);
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qna");
+				
+				
+				
+				
+				
 				
 			}else {	
 				nextPage = "/deny.jsp";

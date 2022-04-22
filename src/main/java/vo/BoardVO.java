@@ -13,6 +13,22 @@ public class BoardVO {
 	private Date boardTime;
 	private int boardParentno;
 	
+	public BoardVO() {
+		
+	}
+	public BoardVO(int level, int boardId, String userId, String boardTitle, String boardDesc, Date boardTime,
+			int boardParentno) {
+		super();
+		this.level = level;
+		this.boardId = boardId;
+		this.userId = userId;
+		this.boardTitle = boardTitle;
+		this.boardDesc = boardDesc;
+		this.boardTime = boardTime;
+		this.boardParentno = boardParentno;
+	}
+	
+	
 	
 	public int getLevel() {
 		return level;

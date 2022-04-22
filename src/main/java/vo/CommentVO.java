@@ -8,7 +8,6 @@ public class CommentVO {
 	private int commentId;
 	private int boardId;
 	private String userId;
-	private String comment;
 	private String commentDesc;
 	private Date commentTime;
 	private int commentParentno;
@@ -31,12 +30,6 @@ public class CommentVO {
 	}
 	public void setUserId(String userId) {
 		this.userId = userId;
-	}
-	public String getComment() {
-		return comment;
-	}
-	public void setComment(String comment) {
-		this.comment = comment;
 	}
 	public String getCommentDesc() {
 		return commentDesc;
