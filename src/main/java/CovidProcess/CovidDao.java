@@ -595,25 +595,81 @@ public class CovidDao {
 
 			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
 			if (a == 1) {
-				String query = "SELECT sum(distinct korea_local_info) as korea_local_info FROM   korea_info WHERE  korea_id = (SELECT Max(korea_id) FROM   korea_info WHERE  korea_time BETWEEN sysdate - ? AND sysdate AND korea_local = '합계')";
-				System.out.println(query);
+				
+				String token = "";
+				
+				String tmpQuery = "SELECT Max(korea_time) as korea_time FROM korea_info";
+				pstmt = con.prepareStatement(tmpQuery);
+				pstmt.executeQuery();
 
-				pstmt = con.prepareStatement(query);
-				pstmt.setInt(1, a);
-
-				ResultSet rs = pstmt.executeQuery();
-
-				while (rs.next()) {
-					count = rs.getInt("korea_local_info");
-				}
-				if (rs != null) {
-					rs.close();
-				}
-				if (pstmt != null) {
+				ResultSet rs1 = pstmt.executeQuery();
+				
+				while(rs1.next()) {
+					token = rs1.getString("korea_time");
+				}if (pstmt != null) {
 					pstmt.close();
 				}
 				if (con != null) {
 					con.close();
+				}
+				
+				if(token == null) {
+					count = 0;
+				}else {
+					int tmpDate = (Integer.parseInt(token.substring(8, 10)));
+					System.out.println(Integer.parseInt(token.substring(8, 10)));
+					System.out.println(tmpDate);
+					String tmpDate2 = Integer.toString(tmpDate);
+					System.out.println(tmpDate2);
+
+					token = (token.substring(0, 8) + tmpDate2).replace("-", "");
+					System.out.println(token);
+					
+					con = dataFactory.getConnection();
+					if(token.equals(dateToStr)) {
+						System.out.println("오늘자");
+						String query = "SELECT sum(distinct korea_local_info) as korea_local_info FROM   korea_info WHERE  korea_id = (SELECT Max(korea_id) FROM   korea_info WHERE  korea_time BETWEEN sysdate - ? AND sysdate AND korea_local = '합계')";
+						System.out.println(query);
+
+						pstmt = con.prepareStatement(query);
+						pstmt.setInt(1, a);
+
+						ResultSet rs = pstmt.executeQuery();
+
+						while (rs.next()) {
+							count = rs.getInt("korea_local_info");
+						}
+						if (rs != null) {
+							rs.close();
+						}
+						if (pstmt != null) {
+							pstmt.close();
+						}
+						if (con != null) {
+							con.close();
+						}
+					}else {
+						System.out.println("어제자");
+						String query = "SELECT sum(distinct korea_local_info) as korea_local_info FROM   korea_info WHERE  korea_id = (SELECT Max(korea_id) FROM   korea_info WHERE  korea_time BETWEEN sysdate - 2 AND sysdate - 1 AND korea_local = '합계')";
+						System.out.println(query);
+
+						pstmt = con.prepareStatement(query);
+
+						ResultSet rs = pstmt.executeQuery();
+
+						while (rs.next()) {
+							count = rs.getInt("korea_local_info");
+						}
+						if (rs != null) {
+							rs.close();
+						}
+						if (pstmt != null) {
+							pstmt.close();
+						}
+						if (con != null) {
+							con.close();
+						}
+					}
 				}
 			} else {
 				String query = "select sum(distinct korea_local_info) as korea_local_info from korea_info where korea_local = '합계' and korea_time BETWEEN sysdate - ? AND sysdate";
@@ -651,30 +707,89 @@ public class CovidDao {
 		int count = 0;
 		try {
 			con = dataFactory.getConnection();
+			String token = "";
+			
+			String tmpQuery = "SELECT Max(foreign_time) as foreign_time FROM foreign_info";
+			pstmt = con.prepareStatement(tmpQuery);
+			pstmt.executeQuery();
 
-			// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
-			String query = "select (select foreign_local_info from foreign_info where foreign_local_i = ? and foreign_time between sysdate - 1 and sysdate)-(select foreign_local_info from foreign_info where foreign_local_i = ? and foreign_time between sysdate - 2 and sysdate - 1) as foreign_local_info from dual";
-			System.out.println(query);
-
-			pstmt = con.prepareStatement(query);
-			pstmt.setString(1, loc);
-			pstmt.setString(2, loc);
-
-			ResultSet rs = pstmt.executeQuery();
-
-			while (rs.next()) {
-				count = rs.getInt("foreign_local_info");
-			}
-			if (rs != null) {
-				rs.close();
-			}
-			if (pstmt != null) {
+			ResultSet rs1 = pstmt.executeQuery();
+			
+			while(rs1.next()) {
+				token = rs1.getString("foreign_time");
+			}if (pstmt != null) {
 				pstmt.close();
 			}
 			if (con != null) {
 				con.close();
 			}
+			
+			if(token == null) {
+				count = 0;
+			}else {
+				int tmpDate = (Integer.parseInt(token.substring(8, 10)));
+				System.out.println(Integer.parseInt(token.substring(8, 10)));
+				System.out.println(tmpDate);
+				String tmpDate2 = Integer.toString(tmpDate);
+				System.out.println(tmpDate2);
 
+				token = (token.substring(0, 8) + tmpDate2).replace("-", "");
+				System.out.println(token);
+				
+				con = dataFactory.getConnection();
+				if(token.equals(dateToStr)) {
+					System.out.println("오늘자");
+					
+					// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
+					String query = "select (select foreign_local_info from foreign_info where foreign_local_i = ? and foreign_time between sysdate - 1 and sysdate)-(select foreign_local_info from foreign_info where foreign_local_i = ? and foreign_time between sysdate - 2 and sysdate - 1) as foreign_local_info from dual";
+					System.out.println(query);
+					
+					pstmt = con.prepareStatement(query);
+					pstmt.setString(1, loc);
+					pstmt.setString(2, loc);
+					
+					ResultSet rs = pstmt.executeQuery();
+					
+					while (rs.next()) {
+						count = rs.getInt("foreign_local_info");
+					}
+					if (rs != null) {
+						rs.close();
+					}
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (con != null) {
+						con.close();
+					}
+				}else {
+					System.out.println("어제자");
+					
+					// 쿼리에 오늘 일일 확진자 수 뽑아 낼 수 있는 쿼리문 입력
+					String query = "select (select foreign_local_info from foreign_info where foreign_local_i = ? and foreign_time between sysdate - 2 and sysdate - 1)-(select foreign_local_info from foreign_info where foreign_local_i = ? and foreign_time between sysdate - 3 and sysdate - 2) as foreign_local_info from dual";
+					System.out.println(query);
+					
+					pstmt = con.prepareStatement(query);
+					pstmt.setString(1, loc);
+					pstmt.setString(2, loc);
+					
+					ResultSet rs = pstmt.executeQuery();
+					
+					while (rs.next()) {
+						count = rs.getInt("foreign_local_info");
+					}
+					if (rs != null) {
+						rs.close();
+					}
+					if (pstmt != null) {
+						pstmt.close();
+					}
+					if (con != null) {
+						con.close();
+					}
+				}
+			}
+			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

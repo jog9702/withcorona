@@ -80,6 +80,8 @@ public class CovidController extends HttpServlet {
 				
 			} else if(action.equals("/covidKorea")){
 				
+				covidService.updateToAuto();
+				
 				session.setAttribute("action", action);
 
 				nextPage = "/covidKorea.jsp";
