@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>COVID-19</title>
+<title>COVID-19 | 답글 작성 페이지</title>
 <script>
 	function goList(){
 		location.href="${ contextPath }/withcorona/qnaView?boardId=${qna.boardId}";

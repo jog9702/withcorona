@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>COVID-19</title>
+<title>COVID-19 | 게시글 등록 페이지</title>
 <script>
 	function goList(){
 		location.href="${ contextPath }/withcorona/qna";

@@ -9,7 +9,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>COVID-19 | 검사소 결과</title> 
+<title>COVID-19 | 검사소 결과 페이지</title> 
 <style>
     .fixed{
         position: fixed;
