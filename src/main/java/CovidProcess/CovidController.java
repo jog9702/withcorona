@@ -329,14 +329,10 @@ public class CovidController extends HttpServlet {
 				
 				String title = request.getParameter("title");
 				String desc = request.getParameter("desc");
-<<<<<<< HEAD
 				int boardParentNo = Integer.parseInt(request.getParameter("boardParentNO"));
 				
 				
 				String userId = (String) session.getAttribute("userId");
-=======
-				String userId = (String) session.getAttribute("userId");		
->>>>>>> a6c59ab1c7043e08b8b46d762355ced9313f57b9
 				
 				boardVo = new BoardVO();
 				
@@ -411,7 +407,6 @@ public class CovidController extends HttpServlet {
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");
 				
-<<<<<<< HEAD
 			}else if(action.equals("/qnaForm")) {
 				
 				request.setAttribute("boardParentNO", request.getParameter("boardParentNO"));
@@ -435,7 +430,6 @@ public class CovidController extends HttpServlet {
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qnaView?boardId=" + boardId);
-=======
 				// 게시판 답글 페이지 이동
 			}else if(action.equals("/qnaReply")){
 				
@@ -462,7 +456,6 @@ public class CovidController extends HttpServlet {
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");
->>>>>>> a6c59ab1c7043e08b8b46d762355ced9313f57b9
 				
 			}else {	
 				nextPage = "/deny.jsp";
