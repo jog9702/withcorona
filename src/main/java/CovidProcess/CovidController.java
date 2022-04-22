@@ -105,7 +105,7 @@ public class CovidController extends HttpServlet {
 
 				nextPage = "/covidForeign.jsp";
 				
-			}else if(action.equals("/foreignSelection")){
+			}else if(action.equals("/foreignSelection")){ 
 				DecimalFormat fmt = new DecimalFormat("###,###");
 				
 				request.setAttribute("kor", fmt.format(covidService.foreignTodayConfirmedCase("한국")));
