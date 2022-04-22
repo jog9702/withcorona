@@ -1131,8 +1131,6 @@ public class CovidDao {
 			int result = pstmt.executeUpdate();
 			System.out.println("새글등록 : result : " + result);
 			
-			ResultSet rs = pstmt.executeQuery();
-			if(rs != null) rs.close();
 			if(pstmt != null) pstmt.close();
 			if(con != null) con.close();
 			
@@ -1190,8 +1188,6 @@ public class CovidDao {
 			pstmt.setInt(3, boardVo.getBoardId());
 			pstmt.executeUpdate();
 			
-			ResultSet rs = pstmt.executeQuery();
-			if(rs != null) rs.close();
 			if(pstmt != null) pstmt.close();
 			if(con != null) con.close();
 			
@@ -1213,8 +1209,6 @@ public class CovidDao {
 			pstmt.setInt(1, boardId);
 			pstmt.executeUpdate();
 			
-			ResultSet rs = pstmt.executeQuery();
-			if(rs != null) rs.close();
 			if(pstmt != null) pstmt.close();
 			if(con != null) con.close();
 			
@@ -1236,6 +1230,10 @@ public class CovidDao {
 			while(rs.next()) {
 				total = rs.getInt("total");
 			}
+			
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
