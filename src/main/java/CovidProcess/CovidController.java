@@ -82,6 +82,18 @@ public class CovidController extends HttpServlet {
 				
 				covidService.updateToAuto();
 				
+				DecimalFormat fmt = new DecimalFormat("###,###");
+				
+				String todayConfirmedCase = fmt.format(covidService.todayConfirmedCase());
+				String monthConfirmedCase = fmt.format(covidService.monthConfirmedCase());
+				String yearConfirmedCase = fmt.format(covidService.yearConfirmedCase());
+				String todayDeath = fmt.format(covidService.todayDeath());
+				
+				session.setAttribute("todayCount", todayConfirmedCase);
+				session.setAttribute("monthCount", monthConfirmedCase);
+				session.setAttribute("yearCount", yearConfirmedCase);
+				session.setAttribute("todayDeath", todayDeath);
+				
 				session.setAttribute("action", action);
 
 				nextPage = "/covidKorea.jsp";
@@ -313,6 +325,7 @@ public class CovidController extends HttpServlet {
 				
 				// 게시판 등록창이동
 			}else if(action.equals("/qnaForm")){
+				request.setAttribute("boardParentNO", request.getParameter("boardParentNO"));
 				
 				nextPage = "/qnaForm.jsp";
 				
@@ -324,19 +337,29 @@ public class CovidController extends HttpServlet {
 				
 				String title = request.getParameter("title");
 				String desc = request.getParameter("desc");
+				int boardParentNo = Integer.parseInt(request.getParameter("boardParentNO"));
 				
-				String userId = (String) session.getAttribute("userId");		
+				
+				String userId = (String) session.getAttribute("userId");
 				
 				boardVo = new BoardVO();
-				boardVo.setBoardParentno(0);
+				
+				if(request.getParameter("boardParentNO") == null) {
+					boardVo.setBoardParentno(0);
+				}else {
+					boardVo.setBoardParentno(boardParentNo);
+				}
+				
 				boardVo.setUserId(userId);
 				boardVo.setBoardTitle(title);
 				boardVo.setBoardDesc(desc);
 				
 				covidService.qnaInsert(boardVo);
 				
+				request.setAttribute("boardParentNO", boardParentNo);
+				
 				nextPage = "";
-				response.sendRedirect("/withcorona/qna");					
+				response.sendRedirect("/withcorona/qna");	
 	
 				// 게시판 상세 조회
 			}else if(action.equals("/qnaView")){
@@ -391,6 +414,30 @@ public class CovidController extends HttpServlet {
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");
+				
+			}else if(action.equals("/qnaForm")) {
+				
+				request.setAttribute("boardParentNO", request.getParameter("boardParentNO"));
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qnaForm");
+				
+			}else if(action.equals("/qnaInsert")){
+				BoardVO	boardVo = new BoardVO();
+				String boardId = request.getParameter("boardId");
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				String parentId = request.getParameter("boardId");
+				
+				boardVo.setBoardId(Integer.parseInt(boardId));
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
+				boardVo.setBoardParentno(Integer.parseInt(parentId));
+				
+				covidService.qnaInsert(boardVo);
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qnaView?boardId=" + boardId);
 				
 			}else {	
 				nextPage = "/deny.jsp";

@@ -27,7 +27,7 @@
 	}
 	
 	function goComment(){
-		location.href="${ contextPath }/withcorona/qnaComment?boardParentNO=${qna.boardId}";
+		location.href="${ contextPath }/withcorona/qnaForm?boardParentNO=${qna.boardId}";
 	}
 </script>
 <style>
@@ -136,6 +136,7 @@
 				<input type="button" value="목록보기" onclick="goList();">
 			</c:if>
         </div>
+        
     </section>
 </body>
 </html>
