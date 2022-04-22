@@ -96,8 +96,8 @@
     <section>
     	<div class="mgt">
 	    	<form action="/withcorona/loginCheck" method="post">
-	    		아이디: <input type="text" name="id"><br>
-	    		비밀번호: <input type="password" name="pwd"><br>
+	    		아이디: <input type="text" name="id" required><br>
+	    		비밀번호: <input type="password" name="pwd" required><br>
 	    		<input type="submit" value="로그인">
 	    		<input type="reset" value="다시입력"><br><br><br>
 	    	</form>

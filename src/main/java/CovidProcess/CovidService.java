@@ -61,7 +61,7 @@ public class CovidService {
 	}
 	
 	//Controller의 loginCheck에서 쓰는 Service - 남모세
-	public UserVO loginCheck(String id, int pwd) {
+	public UserVO loginCheck(String id, String pwd) {
 		UserVO vo = covidDao.loginCheck(id, pwd);
 		return vo;
 	}

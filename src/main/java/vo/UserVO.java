@@ -4,7 +4,7 @@ public class UserVO {
 	
 	// 유저 정보
 	private String userId;
-	private int userPassword;
+	private String userPassword;
 	private String userName;
 	private String userGender;
 	private String userEmail;
@@ -17,10 +17,10 @@ public class UserVO {
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	public int getUserPassword() {
+	public String getUserPassword() {
 		return userPassword;
 	}
-	public void setUserPassword(int userPassword) {
+	public void setUserPassword(String userPassword) {
 		this.userPassword = userPassword;
 	}
 	public String getUserName() {
