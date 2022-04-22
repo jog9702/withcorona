@@ -119,7 +119,7 @@
 					<c:forEach var="qna" items="${ qnaList }" varStatus="qnaNum">
 						<tr align="center">
 							<td width="5%">${ qnaNum.count }</td>
-							<td width="10%">${ qna.userId }, ${ qna.level }</td>
+							<td width="10%">${ qna.userId }</td>
 							<td align="left" width="35%" class="level_${ qna.level }">
 								<span style="padding-right:30px"></span>
 								<c:choose>
