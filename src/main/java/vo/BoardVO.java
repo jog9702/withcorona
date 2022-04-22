@@ -5,6 +5,7 @@ import java.sql.Date;
 public class BoardVO {
 	
 	// 게시판 정보
+	private int level;
 	private int boardId;
 	private String userId;
 	private String boardTitle;
@@ -13,6 +14,12 @@ public class BoardVO {
 	private int boardParentno;
 	
 	
+	public int getLevel() {
+		return level;
+	}
+	public void setLevel(int level) {
+		this.level = level;
+	}
 	public int getBoardId() {
 		return boardId;
 	}

@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>COVID-19</title>
+<title>COVID-19 | 게시판 수정 페이지</title>
 <style>
     .fixed{
         position: fixed;

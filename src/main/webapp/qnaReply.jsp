@@ -1,14 +1,19 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"
-%>
+    pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<c:set var="contextPath" value="${ pageContext.request.contextPath }"/>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
-<title>COVID-19 | 메인페이지</title>
+<title>COVID-19 | 답글 작성 페이지</title>
+<script>
+	function goList(){
+		location.href="${ contextPath }/withcorona/qnaView?boardId=${qna.boardId}";
+	}
+</script>
 <style>
     .fixed{
         position: fixed;
@@ -18,7 +23,7 @@
         margin-top: 240px;
      }
     .mglr{
-        margin: 0px 30px;
+        margin: 0px 80px;
     }
     .flex{
         display: flex;
@@ -66,10 +71,13 @@
 		width:800px;
 		text-align: right;
 	}
+	table{
+		margin-top: 240px;
+	}
 	.login{
 		float: right;
 	}
-	
+
 </style>
 </head>
 <body>
@@ -96,16 +104,15 @@
     </div>
     </header>
     <section>
-        <div class="mgt">
-            <div class="fs1">일일 확진자수 : ${ todayCount }</div>
-            <div class="flex1">
-                <div class="mglr">연간 확진자수 : ${ monthCount }</div>
-                <div class="mglr">월간 확진자수 : ${ yearCount }</div>
-                <div class="mglr">사망자수 : ${ todayDeath }</div>
-            </div>
-        </div>
-
-        
+    	<h1>답글 쓰기</h1>
+    	<form name="articleForm" method="post" action="${contextPath}/withcorona/qnaReplyResult">
+		제목 : <input type="text" name="title"><br>
+		내용 : <br>
+		<textarea name="content" rows=10 cols=65 maxlength="4000"></textarea>
+		<br><br>
+		<input type="hidden" name="boardParentno" value="${boardParentno}">
+		<input type="submit" value="글쓰기">
+		<input type="button" value="목록보기" onclick="goList();">
     </section>
 </body>
 </html>

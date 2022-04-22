@@ -21,25 +21,17 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+
 import vo.*;
 
-/**
- * Servlet implementation class potController
- */
 @WebServlet("/withcorona/*")
 public class CovidController extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doHandle(request, response);
 	}
 
-	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
-	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doHandle(request, response);
 	}
@@ -337,10 +329,14 @@ public class CovidController extends HttpServlet {
 				
 				String title = request.getParameter("title");
 				String desc = request.getParameter("desc");
+<<<<<<< HEAD
 				int boardParentNo = Integer.parseInt(request.getParameter("boardParentNO"));
 				
 				
 				String userId = (String) session.getAttribute("userId");
+=======
+				String userId = (String) session.getAttribute("userId");		
+>>>>>>> a6c59ab1c7043e08b8b46d762355ced9313f57b9
 				
 				boardVo = new BoardVO();
 				
@@ -415,6 +411,7 @@ public class CovidController extends HttpServlet {
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");
 				
+<<<<<<< HEAD
 			}else if(action.equals("/qnaForm")) {
 				
 				request.setAttribute("boardParentNO", request.getParameter("boardParentNO"));
@@ -438,6 +435,34 @@ public class CovidController extends HttpServlet {
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qnaView?boardId=" + boardId);
+=======
+				// 게시판 답글 페이지 이동
+			}else if(action.equals("/qnaReply")){
+				
+				String boardParentno = request.getParameter("boardParentno");
+				request.setAttribute("boardParentno", boardParentno);
+				
+				nextPage = "/qnaReply.jsp";	
+				
+				// 게시판 답글 
+			}else if(action.equals("/qnaReplyResult")){
+				
+				String boardParentno = request.getParameter("boardParentno");
+				String title = request.getParameter("title");
+				String desc = request.getParameter("desc");
+				String userId = (String) session.getAttribute("userId");	
+				
+				BoardVO boardVo = new BoardVO();
+				boardVo.setBoardTitle(title);
+				boardVo.setBoardDesc(desc);
+				boardVo.setUserId(userId);
+				boardVo.setBoardParentno(Integer.parseInt(boardParentno));
+				
+				covidService.addReply(boardVo);
+				
+				nextPage = "";
+				response.sendRedirect("/withcorona/qna");
+>>>>>>> a6c59ab1c7043e08b8b46d762355ced9313f57b9
 				
 			}else {	
 				nextPage = "/deny.jsp";

@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>COVID-19</title>
+<title>COVID-19 | 게시글 등록 페이지</title>
 <script>
 	function goList(){
 		location.href="${ contextPath }/withcorona/qna";
@@ -109,10 +109,15 @@
     	</c:if>
     	<c:if test="${ vo.userAuth != null }">
     		<h1>새글 쓰기</h1>
+<<<<<<< HEAD
 			<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaInsert?boardParentNO=${boardParentNO}">
 			제목 : <input type="text" name="title"><br>
+=======
+			<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaInsert">
+			제목 : <input type="text" name="title" required><br>
+>>>>>>> a6c59ab1c7043e08b8b46d762355ced9313f57b9
 			내용 : <br>
-			<textarea name="desc" rows=10 cols=65 maxlength="4000"></textarea>
+			<textarea name="desc" rows=10 cols=65 maxlength="4000" required></textarea>
 			<br><br>
 			<input type="submit" value="글쓰기">
 			<input type="button" value="목록보기" onclick="goList();">

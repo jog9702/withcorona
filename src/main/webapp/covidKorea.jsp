@@ -8,7 +8,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>확진자 상세</title>
+<title>COVID-19 | 국내 확진자 상세 페이지</title>
 <style>
     .fixed{
         position: fixed;
