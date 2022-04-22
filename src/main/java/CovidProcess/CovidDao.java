@@ -981,7 +981,7 @@ public class CovidDao {
 	}
 
 	// 로그인 시 id pwd 확인 - 남모세
-	public UserVO loginCheck(String id, int pwd) {
+	public UserVO loginCheck(String id, String pwd) {
 
 		UserVO vo = new UserVO();
 
@@ -997,14 +997,14 @@ public class CovidDao {
 			pstmt = con.prepareStatement(query);
 
 			pstmt.setString(1, id);
-			pstmt.setInt(2, pwd);
+			pstmt.setString(2, pwd);
 
 			ResultSet rs = pstmt.executeQuery();
 
 			while (rs.next()) {
 
 				vo.setUserId(rs.getString("user_id"));
-				vo.setUserPassword(rs.getInt("user_password"));
+				vo.setUserPassword(rs.getString("user_password"));
 				vo.setUserName(rs.getString("user_name"));
 				vo.setUserGender(rs.getString("user_gender"));
 				vo.setUserEmail(rs.getString("user_email"));
@@ -1243,7 +1243,7 @@ public class CovidDao {
 			query += " VALUES (?, ?, ?, ?, ?, ?)";
 			pstmt = con.prepareStatement(query);
 			pstmt.setString(1, vo.getUserId());
-			pstmt.setInt(2, vo.getUserPassword());
+			pstmt.setString(2, vo.getUserPassword());
 			pstmt.setString(3, vo.getUserName());
 			pstmt.setString(4, vo.getUserGender());
 			pstmt.setString(5, vo.getUserEmail());
@@ -1333,7 +1333,7 @@ public class CovidDao {
 			while (rs.next()) {
 
 				String userId = rs.getString("user_id");
-				int userPassword = rs.getInt("user_password");
+				String userPassword = rs.getString("user_password");
 				String userName = rs.getString("user_name");
 				String userGender = rs.getString("user_gender");
 				String userEmail = rs.getString("user_email");

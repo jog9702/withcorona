@@ -210,7 +210,7 @@ public class CovidController extends HttpServlet {
 				try {
 					
 					String id = request.getParameter("id");
-					int pwd = Integer.parseInt(request.getParameter("pwd"));
+					String pwd = request.getParameter("pwd");
 					System.out.println("Controller String id: " + id);
 					
 					UserVO vo = new UserVO();
@@ -250,7 +250,7 @@ public class CovidController extends HttpServlet {
 					
 					try {
 						id = request.getParameter("id");
-						int pwd = Integer.parseInt(request.getParameter("pwd"));
+						String pwd = request.getParameter("pwd");
 						String name = request.getParameter("name");
 						String gender = request.getParameter("gender");
 						String email = request.getParameter("email");
