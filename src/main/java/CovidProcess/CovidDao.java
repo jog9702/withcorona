@@ -1113,6 +1113,55 @@ public class CovidDao {
 		return qnaList;
 	}
 	
+	// 댓글 조회
+	public List<CommentVO> commentSelect(int pageNum, int countPerPage){
+		List<CommentVO> commentList = new ArrayList();
+		
+		try {
+			con = dataFactory.getConnection();
+			
+			String query = "";
+			query += "select * from (";
+			query += " select rownum as rnum, comment_id, comment_parentno, comment_desc, comment_time, u.user_id";
+			query += " from comment_info b, user_info u";
+			query += " where b.user_id = u.user_id";
+			query += " start with comment_parentno = 0";
+			query += " connect by prior comment_id = comment_parentno";
+			query += " order siblings by comment_id desc";
+			query += " ) tmp";
+			query += " where rnum > ? and rnum <= ?";
+			
+			int offset = (pageNum - 1) * countPerPage;
+			int to = offset + countPerPage;
+			
+			
+			pstmt = con.prepareStatement(query);
+			pstmt.setInt(1, offset);
+			pstmt.setInt(2, to);
+			ResultSet rs = pstmt.executeQuery();
+			System.out.println(query);
+			
+			while(rs.next()) {
+				CommentVO vo = new CommentVO();
+				vo.setCommentId(rs.getInt("comment_id"));
+				vo.setCommentParentno(rs.getInt("comment_parentno"));
+				vo.setCommentDesc(rs.getString("comment_desc"));
+				vo.setCommentTime(rs.getDate("comment_time"));
+				vo.setUserId(rs.getString("user_id"));
+				
+				commentList.add(vo);
+			}
+			if(rs != null) rs.close();
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return commentList;
+	}
+	
 	// 게시판 입력, 등록
 	public void qnaInsert(BoardVO boardVo) {
 		
@@ -1127,6 +1176,32 @@ public class CovidDao {
 			pstmt.setInt(2, boardVo.getBoardParentno());
 			pstmt.setString(3, boardVo.getBoardTitle());
 			pstmt.setString(4, boardVo.getBoardDesc());
+			
+			int result = pstmt.executeUpdate();
+			System.out.println("새글등록 : result : " + result);
+			
+			if(pstmt != null) pstmt.close();
+			if(con != null) con.close();
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	// 댓글 입력, 등록
+	public void insertComment(CommentVO vo) {
+		
+		try {
+			con = dataFactory.getConnection();
+			String query = "";
+			query += "insert into comment_info (comment_id, board_id, user_id, comment_desc, comment_time, comment_parentno)";
+			query += " values(comment_info_seq.nextval, ?, ?, ?, sysdate, ?)";
+			pstmt = con.prepareStatement(query);
+			
+			pstmt.setInt(1, vo.getBoardId());
+			pstmt.setString(2, vo.getUserId());
+			pstmt.setString(3, vo.getCommentDesc());
+			pstmt.setInt(4, vo.getCommentParentno());
 			
 			int result = pstmt.executeUpdate();
 			System.out.println("새글등록 : result : " + result);

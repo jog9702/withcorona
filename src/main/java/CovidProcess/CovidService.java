@@ -111,6 +111,21 @@ public class CovidService {
 		return resultList;
 	}
 	
+	List recursived(int pId, List list) {
+		List resultList = new ArrayList();
+		
+		for(int i=0; i<list.size(); i++) {
+			CommentVO boardVo = (CommentVO)list.get(i);
+			if(boardVo.getCommentParentno() == pId) {
+				resultList.add(boardVo);
+				
+				List tempList = recursived(boardVo.getCommentId(), list);
+				resultList.add(tempList);
+			}
+		}
+		return resultList;
+	}
+	
 	public List<BoardVO> qnaList(int pageNum, int countPerPage){
 		List<BoardVO> qnaList = covidDao.qnaSelect(pageNum, countPerPage);
 
@@ -157,6 +172,30 @@ public class CovidService {
 	public void qnaReply(BoardVO boardVo) {
 		covidDao.qnaInsert(boardVo);
 	}
+	public void insertComment(CommentVO vo) {
+		covidDao.insertComment(vo);
+	}
+	public List<CommentVO> commentList(int pageNum, int countPerPage){
+		List<CommentVO> commentList = covidDao.commentSelect(pageNum, countPerPage);
+
+		// list는 그냥 모든 row
+		recursived(0, commentList);
+
+		List list = commentList;
+		List resultList = new ArrayList();
+		
+		for(int i=0; i<list.size(); i++) {
+			CommentVO vo = (CommentVO) list.get(i);
+			
+			if(vo.getCommentParentno() == 0) {
+				resultList.add(vo);
+				int articleNo = vo.getBoardId();
+				
+			}
+		}
+		return commentList;
+	}
+	
 	
 	public List<CommentVO> commentList(int boardId){
 		

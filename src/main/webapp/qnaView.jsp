@@ -136,6 +136,7 @@
 				<input type="button" value="목록보기" onclick="goList();">
 			</c:if>
         </div>
+<<<<<<< Updated upstream
         <br><br>
     </section>
         	<table>
@@ -144,18 +145,47 @@
 					<td>작성자</td>
 					<td>댓글내용</td>
 					<td>작성일</td>
+=======
+        
+        <br>
+        <hr>
+        
+        <form action="/withcorona/comment">
+        	<input type="hidden" name="comment" value="${qna.boardId }"></input>
+        	<textarea name="commentText" rows=5 cols=65 maxlength="4000" required></textarea>
+        	<input type="submit" value="댓글 작성">
+        </form>
+        
+        <br>
+        
+        
+            	<table>
+			<thred>
+				<tr>
+					<td colspan="4">댓글</td>
+>>>>>>> Stashed changes
 				</tr>
 			</thred>
 			<tbody>
 			<c:choose>
 				<c:when test="${ empty commentList }">
 					<tr height="10">
+<<<<<<< Updated upstream
 						<td colspan="5">등록된 댓글이 없습니다</td>
 					</tr>
 				</c:when>
 				<c:when test="${! empty commentList }">
 					<c:forEach var="comment" items="${ commentList }" varStatus="qnaNum">
 						<tr align="center">
+=======
+						<td colspan="5">등록된 글이 없습니다</td>
+					</tr>
+				</c:when>
+				<c:when test="${! empty commentList }">
+					<c:forEach var="comment" items="${ commentList }" varStatus="commentNum">
+						<tr align="center">
+							<td width="5%">${ commentNum.count }</td>
+>>>>>>> Stashed changes
 							<td width="10%">${ comment.userId }</td>
 							<td align="left" width="35%">
 								<span style="padding-right:30px"></span>
@@ -164,11 +194,31 @@
 										<c:forEach begin="1" end="${ comment.commentParentno }" step="1">
 											<span style="padding-right:20px"></span>
 										</c:forEach>
+<<<<<<< Updated upstream
 										<span style="font-size:12px">[답변]</span>
 										<div>${ comment.commentDesc }</div>
 									</c:when>
 									<c:otherwise>
 										<div>${ comment.commentDesc }</div>
+=======
+										<span style="font-size:12px">[대댓]</span>
+										${ comment.commentDesc }
+										<form action="/withcorona/comment">
+        									<input type="hidden" name="comment" value="${qna.boardId }"></input>
+        									<input type="hidden" name="commentId" value="${comment.commentId }"></input>
+        									<input type="text" name="commentText" required>
+        									<input type="submit" value="댓글 작성">
+      									</form>
+									</c:when>
+									<c:otherwise>
+										${ comment.commentDesc }
+										<form action="/withcorona/comment">
+        									<input type="hidden" name="comment" value="${qna.boardId }"></input>
+        									<input type="hidden" name="commentId" value="${comment.commentId }"></input>
+        									<input type="text" name="commentText" required>
+        									<input type="submit" value="댓글 작성">
+      									</form>
+>>>>>>> Stashed changes
 									</c:otherwise>
 								</c:choose>
 							</td>
@@ -181,6 +231,7 @@
 			</c:choose>
 		</tbody>
     	</table>
+<<<<<<< Updated upstream
     <section>
     	<form name="qnaForm" method="post" action="${ contextPath }/withcorona/commentInsert">
 			댓글작성 <br>
@@ -188,6 +239,41 @@
 			<br><br>
 			<input type="submit" value="댓글쓰기">
 		</form>
+=======
+    	<div style="text-align:center">
+		<%
+			int total = (int)request.getAttribute("total");
+			int pageNum = (int)request.getAttribute("pageNum");
+			int countPerPage = (int)request.getAttribute("countPerPage");
+
+			double totalpaging = Math.ceil((double)total / countPerPage);
+			
+			final int section = 2;
+			int postion = (int)Math.ceil((double)pageNum / section);
+			int begin = ((postion - 1) * section) + 1;
+			int end = begin + section - 1;
+			if(end > totalpaging){
+				end = (int)totalpaging;
+			}
+			String style = " style='color:red; font-weight:bold;'";
+			pageContext.setAttribute("style", style);
+		%>
+		<%if(begin != 1){%>
+			<a href="${ contextPath }/withcorona/qna?pageNum=<%= begin-1 %>&countPerPage=5" style="margin:10px;">[이전]</a>
+		<% } %>
+		<c:forEach begin="<%= begin %>" end="<%= end %>" var="paging1">
+			<c:if test="${ pageNum == paging1 }">
+				<a ${ sytle }href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=5" style="margin:10px;">[${ paging1 }]</a>			
+			</c:if>
+			<c:if test="${ pageNum != paging1 }">
+				<a href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=5" style="margin:10px;">[${ paging1 }]</a>
+			</c:if>
+		</c:forEach>
+		<%if(end != totalpaging){%>
+			<a href="${ contextPath }/withcorona/qna?pageNum=<%= end+1 %>&countPerPage=5" style="margin:10px;">[다음]</a>
+		<% } %>
+	</div>
+>>>>>>> Stashed changes
     </section>
 </body>
 </html>
