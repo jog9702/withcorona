@@ -106,15 +106,15 @@
 	    		</tr>
 	    		<tr>
 	    			<td>아이디</td>
-	    			<td><input type="text" name="id"></td>
+	    			<td><input type="text" name="id" required></td>
 	    		</tr>
 	    		<tr>
 	    			<td>비밀번호</td>
-	    			<td><input type="password" name="pwd"></td>
+	    			<td><input type="password" name="pwd" required></td>
 	    		</tr>
 	    		<tr>
 	    			<td>이름</td>
-	    			<td><input type="text" name="name"></td>
+	    			<td><input type="text" name="name" required></td>
 	    		</tr>
 	    		<tr>
 	    			<td>성별</td>
@@ -125,7 +125,7 @@
 	    		</tr>
 	    		<tr>
 	    			<td>이메일</td>
-	    			<td><input type="email" name="email"></td>
+	    			<td><input type="email" name="email" required></td>
 	    		</tr>
     		</table>
     		<input type="submit" value="가입하기">
