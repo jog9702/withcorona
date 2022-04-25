@@ -10,10 +10,11 @@
 <meta charset="UTF-8">
 <title>COVID-19 | 메인페이지</title>
 <style>
-    .fixed{
-        position: fixed;
-        margin-top: -230px;
+    #main_view{
+        max-width: 100%;
+        width: 100%;
     }
+    
     .mgt{
         margin-top: 240px;
      }
@@ -23,56 +24,56 @@
     .flex{
         display: flex;
         justify-content: space-around;
-        width: 800px;
+        width: 100%;
         margin-top: 45px;
     }
     .flex1{
         display: flex;
         justify-content: center;
-        width: 800px;
+        width: 100%;
         margin-top: 30px;
     }
     .fs{
         font-size: 40px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     .fs1{
         font-size: 50px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     a:link {
-    	text-decoration: none;
-    	color: black;
-	}
-	
-	a:visited {
-	    text-decoration: none;
-    	color: black;
-	}
-	
-	a:hover {
-	    text-decoration: none;
-    	color: blue;
-	}
-	
-	a:active {
-	    text-decoration: none;
-	}
-	.mg{
-		margin-top: 100px;
-		font-size: 10px;
-		width:800px;
-		text-align: right;
-	}
-	.login{
-		float: right;
-	}
-	
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:visited {
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:hover {
+       text-decoration: none;
+       color: blue;
+   }
+   
+   a:active {
+       text-decoration: none;
+   }
+   .mg{
+      margin-top: 100px;
+      font-size: 10px;
+      width:100%;
+      text-align: right;
+   }
+   .login{
+      float: right;
+   }
 </style>
 </head>
 <body>
+	<div id="main_view">
     <header>
     <div class="fixed">
         <div class="fs">
@@ -107,5 +108,6 @@
 
         
     </section>
+    </div>
 </body>
 </html>

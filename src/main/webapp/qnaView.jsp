@@ -31,77 +31,114 @@
 	}
 </script>
 <style>
-.fixed {
-	position: fixed;
-	margin-top: -230px;
-}
-
-.mgt {
-	margin-top: 240px;
-}
-
-.mglr {
-	margin: 0px 80px;
-}
-
-.flex {
-	display: flex;
-	justify-content: space-around;
-	width: 800px;
-	margin-top: 45px;
-}
-
-.flex1 {
-	display: flex;
-	justify-content: center;
-	width: 800px;
-	margin-top: 30px;
-}
-
-.fs {
-	font-size: 40px;
-	width: 800px;
-	text-align: center;
-}
-
-.fs1 {
-	font-size: 50px;
-	width: 800px;
-	text-align: center;
-}
-
-a:link {
-	text-decoration: none;
-	color: black;
-}
-
-a:visited {
-	text-decoration: none;
-	color: black;
-}
-
-a:hover {
-	text-decoration: none;
-	color: blue;
-}
-
-a:active {
-	text-decoration: none;
-}
-
-.mg {
-	margin-top: 100px;
-	font-size: 10px;
-	width: 800px;
-	text-align: right;
-}
-
-.login {
-	float: right;
-}
+    #main_view{
+        max-width: 100%;
+        width: 100%;
+    }
+    
+    .mgt{
+        margin: auto;
+        width:1000px;
+        border: 1px solid gray;
+        border-radius: 14px;
+	    padding: 10px;
+     }
+    .mglr{
+        margin: 0px 30px;
+    }
+    .flex{
+        display: flex;
+        justify-content: space-around;
+        width: 100%;
+        margin-top: 45px;
+    }
+    .flex1{
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        margin-top: 30px;
+    }
+    .fs{
+        font-size: 40px;
+        width: 100%;
+        text-align: center;
+    }
+    .fs1{
+        font-size: 50px;
+        width: 100%;
+        text-align: center;
+    }
+    a:link {
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:visited {
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:hover {
+       text-decoration: none;
+       color: blue;
+   }
+   
+   a:active {
+       text-decoration: none;
+   }
+   .mg{
+      margin-top: 100px;
+      font-size: 10px;
+      width:100%;
+      text-align: right;
+   }
+   .login{
+      float: right;
+   }
+   
+   .center{
+   		width:800px;
+   		margin:auto;
+   }
+   .right{
+   		text-align:right;
+   }
+   .bright{
+   	    width: 1000px;
+    	text-align: right;
+   }
+   
+   .width492{
+   	width: 800px;
+    text-align: right;
+   }
+   
+   .ta{
+   		width:800px;
+   		border-radius: 14px;
+   }
+   .mh{
+   	min-height: 300px;
+   	border-radius: 14px;
+   }
+   
+   table {
+	border: 2px solid;
+	width: 1000px;
+	margin : auto;
+	}
+	
+	th, td {
+		border: 1px solid;
+	}
+	section{
+		width: 1000px;
+		margin: auto;
+	}
 </style>
 </head>
 <body>
+	
 	<header>
 		<div class="fixed">
 			<div class="fs">
@@ -139,13 +176,11 @@ a:active {
 				<a href="/withcorona/login"><input type="button" value="로그인"></a>
 			</c:if>
 			<c:if test="${ vo.userAuth != null }">
-		작성자 : ${ qna.userId }<br> 제목 : ${ qna.boardTitle }<br> 내용 :
-		<br>
-				<div style="border: 1px black solid; padding: 10px;">${ qna.boardDesc }
+			작성자 : ${ qna.userId }<br> 제목 : ${ qna.boardTitle }<br> 내용 :
+				<div class="mh" style="border: 1px black solid; padding: 10px;">${ qna.boardDesc }
 				</div>
 				<br>
-				<br>
-				<div>
+				<div class="bright">
 					<c:if test="${ qna.userId eq vo.userId || vo.userAuth eq '1'}">
 						<input type="button" value="수정하기" onclick="goUpdate();">
 						<input type="button" value="삭제하기" onclick="goDelete();">
@@ -158,31 +193,25 @@ a:active {
 					</c:if>
 				</div>
 				<br>
-				<br>
-		</section>
-
+				<hr>
 
 		<table>
 			<thred>
 			<tr>
-				<td>작성자</td>
-				<td>댓글내용</td>
-				<td>작성일</td>
-
-				<br>
-				<hr>
-
+				<div class="center">
 				<form action="/withcorona/comment">
 					<input type="hidden" name="comment" value="${qna.boardId }"></input>
-					<textarea name="commentText" rows=5 cols=65 maxlength="4000"
+					<textarea class="ta" name="commentText" rows=5 cols=65 maxlength="4000"
 						required></textarea>
-					<input type="submit" value="댓글 작성">
+					<div class="width492">
+					<input class="right" type="submit" value="댓글 작성">
+					</div>
 				</form>
+				</div>
 
 				<br>
 
 
-				<table>
 					<thred>
 					<tr>
 						<td colspan="4">댓글</td>
@@ -236,9 +265,8 @@ a:active {
 						</c:choose>
 					</tbody>
 				</table>
-				<section>
-					</c:if>
-				</section>
 				</div>
+			</c:if>
+		</section>
 </body>
 </html>

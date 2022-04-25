@@ -278,7 +278,7 @@ public class CovidController extends HttpServlet {
 				List<BoardVO> qnaList = new ArrayList<BoardVO>();
 				
 				int pageNum = 1;
-				int countPerPage = 5;
+				int countPerPage = 10;
 				String strPageNum = request.getParameter("pageNum");
 				String strCountPerPage = request.getParameter("countPerPage");
 				

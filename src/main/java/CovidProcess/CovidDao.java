@@ -1087,6 +1087,8 @@ public class CovidDao {
 			int offset = (pageNum - 1) * countPerPage;
 			int to = offset + countPerPage;
 			
+			System.out.println("cp: "+countPerPage);
+			
 			System.out.println(offset);
 			System.out.println(to);
 			pstmt = con.prepareStatement(query);

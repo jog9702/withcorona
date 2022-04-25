@@ -10,12 +10,13 @@
 <meta charset="UTF-8">
 <title>COVID-19 | 해외 확진자 상세 페이지</title>
 <style>
-    .fixed{
-        position: fixed;
-        margin-top: -230px;
+    #main_view{
+        max-width: 100%;
+        width: 100%;
     }
+    
     .mgt{
-        margin-top: 240px;
+        margin-top: 154px;
      }
     .mglr{
         margin: 0px 30px;
@@ -23,58 +24,61 @@
     .flex{
         display: flex;
         justify-content: space-around;
-        width: 800px;
+        width: 100%;
         margin-top: 45px;
     }
     .flex1{
         display: flex;
         justify-content: center;
-        width: 800px;
+        width: 100%;
         margin-top: 30px;
     }
     .fs{
         font-size: 40px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     .fs1{
         font-size: 50px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     a:link {
-    	text-decoration: none;
-    	color: black;
-	}
-	
-	a:visited {
-	    text-decoration: none;
-    	color: black;
-	}
-	
-	a:hover {
-	    text-decoration: none;
-    	color: blue;
-	}
-	
-	a:active {
-	    text-decoration: none;
-	}
-    .mgt-{
-        margin-top: 30px;
-        font-size: 30px;
-    }
-    .select{
-        width: 800px;
-        text-align: center;
-    }
-    .fs--{
-    	font-size: 15px;
-    }
-	.login{
-		float: right;
-	}
-
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:visited {
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:hover {
+       text-decoration: none;
+       color: blue;
+   }
+   
+   a:active {
+       text-decoration: none;
+   }
+   .mg{
+      margin-top: 100px;
+      font-size: 10px;
+      width:100%;
+      text-align: right;
+   }
+   .login{
+      float: right;
+   }
+   .center{
+   		text-align:center;
+   }
+   .mgt-30{
+   		margin-top:6%;
+   }
+   .update{
+   		margin-top:1%;
+   }
 </style>
 </head>
 <body>
@@ -110,7 +114,7 @@
         </div>
         
         <div>
-            <div class="mgt- select">
+            <div class="mgt- select mgt-30 center">
 	        	<c:choose>
 	 	       		<c:when test="${ empty to }">
 	 	       			<div>지역을 입력하세요</div>
@@ -122,7 +126,7 @@
 	        	</c:choose>
             </div>
 
-            <div class="select">
+            <div class="select center">
         	<form action="/withcorona/foreignSelection">
 				<input type="text" value="국가를 입력하세요" name="loc">
 				<input type="submit" value="조회" />
@@ -131,12 +135,14 @@
 
         </div>
         
+        <div class="center update">
         <c:if test="${ vo.userAuth eq '1' }">
 	        <form action="/withcorona/fUpdate">
 	        	<input type="text" name="before2" value="yyyymmdd">
 	        	<input type="submit" value="업데이트">
 	        </form>
         </c:if>
+        </div>
     </section>
 </body>
 </html>

@@ -14,66 +14,70 @@
 	}
 </script>
 <style>
-    .fixed{
-        position: fixed;
-        margin-top: -230px;
+	section{
+		width: 491px;
+    	margin: auto;
+	}
+    #main_view{
+        max-width: 100%;
+        width: 100%;
     }
+    
     .mgt{
-        margin-top: 240px;
+            margin-top: 130px;
      }
     .mglr{
-        margin: 0px 80px;
+        margin: 0px 30px;
     }
     .flex{
         display: flex;
         justify-content: space-around;
-        width: 800px;
+        width: 100%;
         margin-top: 45px;
     }
     .flex1{
         display: flex;
         justify-content: center;
-        width: 800px;
+        width: 100%;
         margin-top: 30px;
     }
     .fs{
         font-size: 40px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     .fs1{
         font-size: 50px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     a:link {
-    	text-decoration: none;
-    	color: black;
-	}
-	
-	a:visited {
-	    text-decoration: none;
-    	color: black;
-	}
-	
-	a:hover {
-	    text-decoration: none;
-    	color: blue;
-	}
-	
-	a:active {
-	    text-decoration: none;
-	}
-	.mg{
-		margin-top: 100px;
-		font-size: 10px;
-		width:800px;
-		text-align: right;
-	}
-	.login{
-		float: right;
-	}
-
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:visited {
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:hover {
+       text-decoration: none;
+       color: blue;
+   }
+   
+   a:active {
+       text-decoration: none;
+   }
+   .mg{
+      margin-top: 100px;
+      font-size: 10px;
+      width:100%;
+      text-align: right;
+   }
+   .login{
+      float: right;
+   }
 </style>
 </head>
 <body>
@@ -108,11 +112,11 @@
     		
     	</c:if>
     	<c:if test="${ vo.userAuth != null }">
-    		<h1>새글 쓰기</h1>
+    		<h1 class="mgt">새글 쓰기</h1>
 			<form name="qnaForm" method="post" action="${ contextPath }/withcorona/qnaInsert">
-			제목 : <input type="text" name="title" required><br>
+			제목 : <input type="text" placeholder="제목을 입력하세요" name="title" required><br>
 			내용 : <br>
-			<textarea name="desc" rows=10 cols=65 maxlength="4000" required></textarea>
+			<textarea name="desc" rows=10 cols=65 maxlength="4000" placeholder="내용을 입력하세요" required></textarea>
 			<br><br>
 			<input type="submit" value="글쓰기">
 			<input type="button" value="목록보기" onclick="goList();">

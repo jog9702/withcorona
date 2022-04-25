@@ -10,69 +10,86 @@
 <meta charset="UTF-8">
 <title>COVID-19 | 게시글 목록 페이지</title>
 <style>
-    .fixed{
-        position: fixed;
-        margin-top: -230px;
+    #main_view{
+        max-width: 100%;
+        width: 100%;
     }
+    
     .mgt{
-        margin-top: 240px;
+        margin-top: 30px;
      }
     .mglr{
-        margin: 0px 80px;
+        margin: 0px 30px;
     }
     .flex{
         display: flex;
         justify-content: space-around;
-        width: 800px;
+        width: 100%;
         margin-top: 45px;
     }
     .flex1{
         display: flex;
         justify-content: center;
-        width: 800px;
+        width: 100%;
         margin-top: 30px;
     }
     .fs{
         font-size: 40px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     .fs1{
         font-size: 50px;
-        width: 800px;
+        width: 100%;
         text-align: center;
     }
     a:link {
-    	text-decoration: none;
-    	color: black;
-	}
-	
-	a:visited {
-	    text-decoration: none;
-    	color: black;
-	}
-	
-	a:hover {
-	    text-decoration: none;
-    	color: blue;
-	}
-	
-	a:active {
-	    text-decoration: none;
-	}
-	.mg{
-		margin-top: 100px;
-		font-size: 10px;
-		width:800px;
-		text-align: right;
-	}
-	table{
-		margin-top: 240px;
-	}
-	.login{
-		float: right;
-	}
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:visited {
+       text-decoration: none;
+       color: black;
+   }
+   
+   a:hover {
+       text-decoration: none;
+       color: blue;
+   }
+   
+   a:active {
+       text-decoration: none;
+   }
+   .mg{
+      margin-top: 100px;
+      font-size: 10px;
+      width:100%;
+      text-align: right;
+   }
+   .login{
+      float: right;
+   }
+   .center{
+   		margin: auto;
+    	width: 1000px;
+    	text-align:right;
+   }
+   .bgcg{
+   		background-color:rgba(225, 225, 225, 0.5);
+   }
 
+	table {
+	border: 2px solid;
+	width: 1000px;
+	margin : auto;
+   	border-radius: 10px;
+   	margin-top : 45px;
+	}
+	
+	th, td {
+		border: 1px solid;
+	}
 </style>
 </head>
 <body>
@@ -101,7 +118,7 @@
     <section>
     	<table>
 			<thred>
-				<tr>
+				<tr class="bgcg">
 					<td>글 번호</td>
 					<td>작성자</td>
 					<td>제목</td>
@@ -119,7 +136,7 @@
 					<c:forEach var="qna" items="${ qnaList }" varStatus="qnaNum">
 						<tr align="center">
 							<td width="5%">${ qnaNum.count }</td>
-							<td width="10%">${ qna.userId }, ${ qna.level }</td>
+							<td width="10%">${ qna.userId }</td>
 							<td align="left" width="35%" class="level_${ qna.level }">
 								<span style="padding-right:30px"></span>
 								<c:choose>
@@ -163,23 +180,28 @@
 			pageContext.setAttribute("style", style);
 		%>
 		<%if(begin != 1){%>
-			<a href="${ contextPath }/withcorona/qna?pageNum=<%= begin-1 %>&countPerPage=5" style="margin:10px;">[이전]</a>
+			<a href="${ contextPath }/withcorona/qna?pageNum=<%= begin-1 %>&countPerPage=10" style="margin:10px;">[이전]</a>
 		<% } %>
 		<c:forEach begin="<%= begin %>" end="<%= end %>" var="paging1">
 			<c:if test="${ pageNum == paging1 }">
-				<a ${ sytle }href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=5" style="margin:10px;">[${ paging1 }]</a>			
+				<a ${ sytle }href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=10" style="margin:10px;">[${ paging1 }]</a>			
 			</c:if>
 			<c:if test="${ pageNum != paging1 }">
-				<a href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=5" style="margin:10px;">[${ paging1 }]</a>
+				<a href="${ contextPath }/withcorona/qna?pageNum=${paging1}&countPerPage=10" style="margin:10px;">[${ paging1 }]</a>
 			</c:if>
 		</c:forEach>
 		<%if(end != totalpaging){%>
-			<a href="${ contextPath }/withcorona/qna?pageNum=<%= end+1 %>&countPerPage=5" style="margin:10px;">[다음]</a>
+			<a href="${ contextPath }/withcorona/qna?pageNum=<%= end+1 %>&countPerPage=10" style="margin:10px;">[다음]</a>
 		<% } %>
 	</div>
     </section>
+    	<div class="center">
     	<a href="${ contextPath }/withcorona/qnaForm">
-		<p>글쓰기</p>
+    	<button>
+		글쓰기
+		</button>
+		</a>
+		</div>
 	</a>
 </body>
 </html>
