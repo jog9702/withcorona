@@ -1084,6 +1084,8 @@ public class CovidDao {
 			int offset = (pageNum - 1) * countPerPage;
 			int to = offset + countPerPage;
 			
+			System.out.println(offset);
+			System.out.println(to);
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, offset);
 			pstmt.setInt(2, to);
@@ -1099,6 +1101,8 @@ public class CovidDao {
 				boardVo.setBoardDesc(rs.getString("board_desc"));
 				boardVo.setBoardTime(rs.getDate("board_time"));
 				boardVo.setUserId(rs.getString("user_id"));
+				
+				System.out.println("level : " + boardVo.getLevel());
 				
 				qnaList.add(boardVo);
 			}
