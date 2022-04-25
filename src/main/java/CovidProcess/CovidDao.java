@@ -1332,7 +1332,7 @@ public class CovidDao {
 		try {
 			con = dataFactory.getConnection();
 			
-			String query = "select * from ( select level, comment_id, comment_parentno, comment_desc, comment_time, u.user_id from comment_info b, user_info u where b.user_id = u.user_id and board_id=? start with comment_parentno = 0 connect by prior comment_id = comment_parentno order siblings by comment_id desc) tmp";
+			String query = "select * from ( select level, comment_id, comment_parentno, comment_desc, comment_time, u.user_id from comment_info b, user_info u where board_id = ? start with comment_parentno = 0 connect by prior comment_id = comment_parentno order siblings by comment_id desc) tmp";
 			
 			pstmt = con.prepareStatement(query);
 			pstmt.setInt(1, boardId);
