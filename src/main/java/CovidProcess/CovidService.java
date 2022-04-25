@@ -111,20 +111,20 @@ public class CovidService {
 		return resultList;
 	}
 	
-	List recursived(int pId, List list) {
-		List resultList = new ArrayList();
-		
-		for(int i=0; i<list.size(); i++) {
-			CommentVO boardVo = (CommentVO)list.get(i);
-			if(boardVo.getCommentParentno() == pId) {
-				resultList.add(boardVo);
-				
-				List tempList = recursived(boardVo.getCommentId(), list);
-				resultList.add(tempList);
-			}
-		}
-		return resultList;
-	}
+//	List recursived(int pId, List list) {
+//		List resultList = new ArrayList();
+//		
+//		for(int i=0; i<list.size(); i++) {
+//			CommentVO boardVo = (CommentVO)list.get(i);
+//			if(boardVo.getCommentParentno() == pId) {
+//				resultList.add(boardVo);
+//				
+//				List tempList = recursived(boardVo.getCommentId(), list);
+//				resultList.add(tempList);
+//			}
+//		}
+//		return resultList;
+//	}
 	
 	public List<BoardVO> qnaList(int pageNum, int countPerPage){
 		List<BoardVO> qnaList = covidDao.qnaSelect(pageNum, countPerPage);
@@ -179,7 +179,7 @@ public class CovidService {
 		List<CommentVO> commentList = covidDao.commentSelect(pageNum, countPerPage);
 
 		// list는 그냥 모든 row
-		recursived(0, commentList);
+//		recursived(0, commentList);
 
 		List list = commentList;
 		List resultList = new ArrayList();
@@ -198,25 +198,7 @@ public class CovidService {
 	
 	
 	public List<CommentVO> commentList(int boardId){
-		
-		List<CommentVO> commentList = covidDao.commentSelect(boardId);
-
-		// list는 그냥 모든 row
-		recursive(0, commentList);
-
-		List list = commentList;
-		List resultList = new ArrayList();
-		
-		for(int i=0; i<list.size(); i++) {
-			CommentVO commentVo = (CommentVO) list.get(i);
-			
-			if(commentVo.getCommentParentno() == 0) {
-				resultList.add(commentVo);
-				int articleNo = commentVo.getBoardId();
-				
-			}
-		}
-		return commentList;
+		return covidDao.commentSelect(boardId);
 	}
 	
 	public void commentInsert(CommentVO commentVO) {

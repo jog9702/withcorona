@@ -332,11 +332,7 @@ public class CovidController extends HttpServlet {
 				// 게시판 상세 조회
 			}else if(action.equals("/qnaView")){
 				BoardVO	boardVo = new BoardVO();
-<<<<<<< Updated upstream
 				CommentVO commentVo = new CommentVO();
-=======
-				
->>>>>>> Stashed changes
 				String boardId = request.getParameter("boardId");
 				
 				boardVo = covidService.qnaView(Integer.parseInt(boardId));
@@ -348,43 +344,20 @@ public class CovidController extends HttpServlet {
 					boardVo.setBoardDesc(desc);					
 				}
 				
-				List<CommentVO> commenetList = new ArrayList<CommentVO>();
+				List<CommentVO> commentList = new ArrayList<CommentVO>();
 				
-				commenetList = covidService.commentList(Integer.parseInt(boardId));
+				commentList = covidService.commentList(Integer.parseInt(boardId));
 				
-				request.setAttribute("commenetList", commenetList);
+				System.out.println();
+				request.setAttribute("commentList", commentList);
+				for(int i=0; i<commentList.size(); i++) {
+					CommentVO list = commentList.get(i);
+					System.out.println(list.getCommentDesc());
+				}
 				
 				request.setAttribute("qna", boardVo);
 				request.setAttribute("comment", commentVo);
 				
-				session.setAttribute("action", action);
-				
-				List<CommentVO> commentList = new ArrayList<CommentVO>();
-				
-				int pageNum = 1;
-				int countPerPage = 10;
-				
-				commentList = covidService.commentList(pageNum, countPerPage);
-				request.setAttribute("commentList", commentList);
-				
-				String strPageNum = request.getParameter("pageNum");
-				String strCountPerPage = request.getParameter("countPerPage");
-				
-				if(strPageNum != null) {
-					pageNum = Integer.parseInt(strPageNum);
-				}
-				if(strCountPerPage != null) {
-					countPerPage = Integer.parseInt(strCountPerPage);
-				}
-				
-				covidService.commentList(pageNum, countPerPage);
-				
-				
-				
-				int total = covidService.qnaTotal();
-				request.setAttribute("total", total);
-				request.setAttribute("pageNum", pageNum);
-				request.setAttribute("countPerPage", countPerPage);
 				
 				nextPage = "/qnaView.jsp";
 				
@@ -448,11 +421,6 @@ public class CovidController extends HttpServlet {
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qna");
-				
-<<<<<<< Updated upstream
-
-				
-				
 				
 				
 				// 댓글 등록
@@ -523,14 +491,19 @@ public class CovidController extends HttpServlet {
 				
 				
 				
-=======
 			}else if(action.equals("/comment")){
 				CommentVO vo = new CommentVO();
 				
 				String userId = (String) session.getAttribute("userId");
 				String boardId = request.getParameter("comment");
 				String commentDesc = request.getParameter("commentText");
-				int commentPno = Integer.parseInt(request.getParameter("commentId"));
+				int commentPno = 0;
+				
+				if(request.getParameter("commentId")==null) {
+					commentPno = 0;
+				}else {
+					commentPno = Integer.parseInt(request.getParameter("commentId"));
+				}
 				
 				
 				System.out.println(boardId);
@@ -547,7 +520,6 @@ public class CovidController extends HttpServlet {
 				
 				nextPage = "";
 				response.sendRedirect("/withcorona/qnaView?boardId="+boardId);
->>>>>>> Stashed changes
 				
 			}else {	
 				nextPage = "/deny.jsp";

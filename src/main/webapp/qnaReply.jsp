@@ -103,6 +103,7 @@
         <hr>
     </div>
     </header>
+    <div class="mgt">
     <section>
     	<h1>답글 쓰기</h1>
     	<form name="articleForm" method="post" action="${contextPath}/withcorona/qnaReplyResult">
@@ -114,5 +115,6 @@
 		<input type="submit" value="글쓰기">
 		<input type="button" value="목록보기" onclick="goList();">
     </section>
+    </div>
 </body>
 </html>

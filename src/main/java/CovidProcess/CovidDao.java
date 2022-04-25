@@ -441,6 +441,7 @@ public class CovidDao {
 
 	// foreign 테일블 드랍
 	public void foreignDropTable() {
+		System.out.println("foreign drop");
 		try {
 			con = dataFactory.getConnection();
 			String query = "drop table foreign_info";
@@ -461,6 +462,7 @@ public class CovidDao {
 
 	// foreign 테이블 생성
 	public void foreignCreateTable() {
+		System.out.println("foreign create");
 		try {
 			con = dataFactory.getConnection();
 			String query = "create table foreign_info(foreign_id number(10) primary key, foreign_death number(10), foreign_local_o varchar2(1000), foreign_local_i varchar2(1000), foreign_local_info number(10), foreign_time date)";
@@ -482,6 +484,7 @@ public class CovidDao {
 
 	// 입력받은 날짜 부터 오늘 까지의 xml정보로 DB초기화
 	public void foreignUpdateDBtoDate(String sDay) {
+		System.out.println("foreign update");
 
 		String url = "http://openapi.data.go.kr/openapi/service/rest/Covid19/getCovid19NatInfStateJson?serviceKey=sIYnCEa6cv0btJb%2Bc2pWvDc76iYuhohbaoz%2B9bwsx8R2C8sPhrIivNMS3HHDCkVoBKoCktxoml4HN%2Bih04AWPQ%3D%3D&pageNo=1&numOfRows=10&";
 		url += "startCreateDt=" + sDay + "&endCreateDt=" + dateToStr;
@@ -1126,7 +1129,7 @@ public class CovidDao {
 			
 			String query = "";
 			query += "select * from (";
-			query += " select rownum as rnum, comment_id, comment_parentno, comment_desc, comment_time, u.user_id";
+			query += " select rownum as rnum, level, comment_id, comment_parentno, comment_desc, comment_time, u.user_id";
 			query += " from comment_info b, user_info u";
 			query += " where b.user_id = u.user_id";
 			query += " start with comment_parentno = 0";
@@ -1147,6 +1150,7 @@ public class CovidDao {
 			
 			while(rs.next()) {
 				CommentVO vo = new CommentVO();
+				vo.setLevel(rs.getInt("level"));
 				vo.setCommentId(rs.getInt("comment_id"));
 				vo.setCommentParentno(rs.getInt("comment_parentno"));
 				vo.setCommentDesc(rs.getString("comment_desc"));
@@ -1323,34 +1327,27 @@ public class CovidDao {
 	// 댓글 조회
 	public List<CommentVO> commentSelect(int boardId){
 		List<CommentVO> commentList = new ArrayList();
-		BoardVO boardVo = new BoardVO();
 		CommentVO commentVo = new CommentVO();
 		
 		try {
 			con = dataFactory.getConnection();
 			
-			String query = "";
-			query += "select * from (";
-			query += " select comment_id, comment_parentno, comment_desc, comment_time, b.board_id";
-			query += " from comment_info c, board_info b";
-			query += " where b.board_id = ? and c.board_id = b.board_id";
-			query += " start with comment_parentno = 0";
-			query += " connect by prior comment_id = comment_parentno";
-			query += " order siblings by comment_id desc";
-			query += " ) tmp";
+			String query = "select * from ( select level, comment_id, comment_parentno, comment_desc, comment_time, u.user_id from comment_info b, user_info u where b.user_id = u.user_id and board_id=? start with comment_parentno = 0 connect by prior comment_id = comment_parentno order siblings by comment_id desc) tmp";
 			
 			pstmt = con.prepareStatement(query);
-			pstmt.setInt(1, boardVo.getBoardId());
+			pstmt.setInt(1, boardId);
 			ResultSet rs = pstmt.executeQuery();
 			System.out.println(query);
 			
 			while(rs.next()) {
+				commentVo = new CommentVO();
+				commentVo.setLevel(rs.getInt("level"));
 				commentVo.setCommentId(rs.getInt("comment_id"));
-				commentVo.setBoardId(rs.getInt("board_id"));
+				commentVo.setBoardId(boardId);
 				commentVo.setCommentParentno(rs.getInt("comment_parentno"));
 				commentVo.setCommentDesc(rs.getString("comment_desc"));
 				commentVo.setCommentTime(rs.getDate("comment_time"));
-				commentVo.setUserId(rs.getString("user_id*"));
+				commentVo.setUserId(rs.getString("user_id"));
 				
 				commentList.add(commentVo);
 			}
